@@ -727,13 +727,14 @@
             <option value="">Semua Kondisi</option>
             <option value="Baik">Baik</option>
             <option value="Perlu Perbaikan">Perlu Perbaikan</option>
+            <option value="Dalam Perbaikan">Dalam Perbaikan</option>
             <option value="Rusak">Rusak</option>
           </select>
         </div>
 
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>SKU</th><th>Nama</th><th>Kategori</th><th>Kondisi</th><th>Stok</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>SKU</th><th>Nama</th><th>Kategori</th><th>Kondisi</th><th>Stok</th><th>Riwayat Perbaikan</th><th>Aksi</th></tr></thead>
             <tbody id="tbodyBarang"></tbody>
           </table>
         </div>
@@ -1045,9 +1046,9 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Laporan Stok</div>
-          <button class="btn btn-primary" onclick="exportCSV()">
+          <button class="btn btn-success" onclick="exportStokExcel()">
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export CSV
+            Export ke Excel (Rapi)
           </button>
         </div>
         
@@ -1077,9 +1078,9 @@
             Closing Stok Bulanan
           </div>
           <div class="panel-actions">
-            <button class="btn btn-ghost" onclick="exportClosingCSV()">
+            <button class="btn btn-success" onclick="exportClosingExcel()">
               <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Export CSV
+              Export ke Excel (Rapi)
             </button>
             <button class="btn btn-primary" onclick="openClosingModal()">
               <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
@@ -1159,6 +1160,10 @@
       <div class="panel">
         <div class="panel-header">
           <div class="panel-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Riwayat Transaksi</div>
+          <button class="btn btn-success" onclick="exportRiwayatExcel()">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export ke Excel (Rapi)
+          </button>
         </div>
         
         <div class="search-filter-bar">
@@ -1192,7 +1197,7 @@
         <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
           <button class="btn btn-primary" onclick="backupData()">
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download Backup
+            Download Backup (.json)
           </button>
           <label class="btn btn-success" style="cursor:pointer;">
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -1252,6 +1257,7 @@
         <select id="fKondisi">
           <option value="Baik">Baik / Berfungsi</option>
           <option value="Perlu Perbaikan">Perlu Perbaikan</option>
+          <option value="Dalam Perbaikan">Dalam Perbaikan</option>
           <option value="Rusak">Rusak</option>
           <option value="Habis">Habis</option>
         </select>
@@ -1262,7 +1268,10 @@
       <div class="form-group"><label>Pemilik / Milik</label><input id="fPemilik" placeholder="cth: PT. ABC (Aset)"></div>
       <div class="form-group"><label>Lokasi Penyimpanan</label><input id="fLokasi" placeholder="cth: Rak A-1"></div>
     </div>
-    <div class="form-group"><label>Catatan</label><input id="fCatatan" placeholder="Opsional"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Berapa Kali Diperbaiki</label><input type="number" id="fFrekuensiPerbaikan" value="0" min="0"></div>
+      <div class="form-group"><label>Catatan</label><input id="fCatatan" placeholder="Opsional"></div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modalBarang')">Batal</button>
       <button class="btn btn-primary" onclick="saveBarang()">Simpan</button>
@@ -1351,6 +1360,7 @@
         <select id="iHasil">
           <option value="Berfungsi Baik">Berfungsi Baik</option>
           <option value="Perlu Perbaikan">Perlu Perbaikan</option>
+          <option value="Dalam Perbaikan">Dalam Perbaikan</option>
           <option value="Rusak Total">Rusak Total</option>
         </select>
       </div>
@@ -1625,7 +1635,6 @@ let data = {
 let isCloudReady = false;
 const CLOUD_DOC_ID = 'wms_data_pt_trimatra';
 
-// Tangkap event jika Firebase sudah siap
 window.addEventListener('firebaseReady', () => {
   isCloudReady = true;
   loadDataFromCloud();
@@ -1641,7 +1650,6 @@ async function loadDataFromCloud() {
     
     if (docSnap.exists()) {
       const cloudData = docSnap.data();
-      // Timpa data lokal dengan data dari Cloud
       data.barang = cloudData.barang || [];
       data.transaksi = cloudData.transaksi || [];
       data.scaffolding = cloudData.scaffolding || [];
@@ -1655,15 +1663,13 @@ async function loadDataFromCloud() {
       
       renderAll();
     } else {
-      // Jika di cloud kosong, cek apakah ada data lama di localStorage
-      // Jika ada, pindahkan ke cloud.
       const localData = localStorage.getItem('wms_gudang_v3');
       if (localData) {
         try {
           const parsed = JSON.parse(localData);
           if (parsed.barang && parsed.barang.length > 0) {
             Object.assign(data, parsed);
-            await saveDataToCloud(); // Upload ke cloud
+            await saveDataToCloud(); 
             toast('Data lokal berhasil dipindahkan ke Cloud.', 'success');
           }
         } catch(e) {}
@@ -1671,7 +1677,7 @@ async function loadDataFromCloud() {
     }
   } catch (e) {
     console.error("Error loading from cloud:", e);
-    toast('Gagal memuat data dari Cloud. Periksa koneksi internet & Rules.', 'error');
+    toast('Gagal memuat dari Cloud. Periksa internet & Rules Firebase.', 'error');
   }
   
   hideSaveIndicator();
@@ -1679,7 +1685,6 @@ async function loadDataFromCloud() {
 
 async function saveDataToCloud() {
   if (!isCloudReady) {
-    // Fallback ke localstorage jika firebase belum siap
     localStorage.setItem('wms_gudang_v3', JSON.stringify(data));
     return;
   }
@@ -1701,10 +1706,7 @@ async function saveDataToCloud() {
       closing: data.closing,
       lastUpdated: new Date().toISOString()
     });
-    
-    // Simpan juga ke localStorage sebagai backup
     localStorage.setItem('wms_gudang_v3', JSON.stringify(data));
-    
   } catch (e) {
     console.error("Error saving to cloud:", e);
     toast('Gagal menyimpan ke Cloud! Cek aturan Firestore (Rules).', 'error');
@@ -1828,6 +1830,7 @@ function stokBadge(stok) {
 function kondisiBadge(k) {
   if (k === 'Baik') return 'badge-green';
   if (k === 'Perlu Perbaikan') return 'badge-orange';
+  if (k === 'Dalam Perbaikan') return 'badge-yellow';
   if (k === 'Rusak') return 'badge-red';
   return 'badge-gray';
 }
@@ -1870,12 +1873,14 @@ function openBarangModal(idx) {
     document.getElementById('fPemilik').value = b.pemilik || '';
     document.getElementById('fLokasi').value = b.lokasi || '';
     document.getElementById('fCatatan').value = b.catatan || '';
+    document.getElementById('fFrekuensiPerbaikan').value = b.frekuensiPerbaikan || 0;
     hint.innerHTML = b.autoSku 
       ? 'SKU di-generate otomatis. Ubah jika sudah dapat kode resmi.'
       : 'SKU sudah diisi manual.';
     hint.style.color = b.autoSku ? '#fbbf24' : 'var(--text-3)';
   } else {
     ['fSku','fNama','fStok','fPemilik','fLokasi','fCatatan'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fFrekuensiPerbaikan').value = 0;
     document.getElementById('fSatuan').value = 'Pcs';
     document.getElementById('fKategori').value = 'Alat';
     document.getElementById('fKondisi').value = 'Baik';
@@ -1905,6 +1910,7 @@ function saveBarang() {
     pemilik: document.getElementById('fPemilik').value.trim(),
     lokasi: document.getElementById('fLokasi').value.trim(),
     catatan: document.getElementById('fCatatan').value.trim(),
+    frekuensiPerbaikan: parseInt(document.getElementById('fFrekuensiPerbaikan').value) || 0,
     autoSku
   };
   
@@ -1957,7 +1963,7 @@ function renderBarang() {
   });
   const tbody = document.getElementById('tbodyBarang');
   if (list.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">Belum ada data barang sesuai filter</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">Belum ada data barang sesuai filter</td></tr>';
     return;
   }
   tbody.innerHTML = list.map(b => {
@@ -1966,12 +1972,15 @@ function renderBarang() {
     const skuBadge = b.autoSku 
       ? `<span style="display:inline-flex;align-items:center;gap:5px;"><b>${b.sku}</b><span class="badge badge-cyan" style="font-size:9px;padding:1px 5px;">AUTO</span></span>`
       : `<b>${b.sku}</b>`;
+    const freq = b.frekuensiPerbaikan || 0;
+    
     return `<tr>
       <td>${skuBadge}</td>
       <td>${b.nama}${b.lokasi ? `<br><small style="color:var(--text-3)">${b.lokasi}</small>` : ''}</td>
       <td><span class="badge badge-purple">${b.kategori}</span></td>
       <td><span class="badge ${kondisiBadge(b.kondisi || 'Baik')}">${b.kondisi || 'Baik'}</span></td>
       <td><span class="badge ${stokBadge(stok)}">${stok} ${b.satuan}</span></td>
+      <td>${freq > 0 ? `<b>${freq}</b> kali` : '-'}</td>
       <td>
         <div class="action-btns">
           <button class="btn btn-sm btn-ghost" onclick="openBarangModal(${idx})" title="Edit">
@@ -2250,28 +2259,54 @@ function saveInspeksi() {
   const tanggal = document.getElementById('iTanggal').value;
   const sku = document.getElementById('iAlat').value;
   const mekanik = document.getElementById('iMekanik').value.trim();
+  const hasil = document.getElementById('iHasil').value;
+  
   if (!tanggal || !sku || !mekanik) { toast('Lengkapi data!', 'error'); return; }
   
   const item = {
-    tanggal, sku, mekanik,
-    hasil: document.getElementById('iHasil').value,
+    tanggal, sku, mekanik, hasil,
     catatan: document.getElementById('iCatatan').value.trim()
   };
   
+  const bIdx = data.barang.findIndex(b => b.sku === sku);
+  let oldHasil = null;
+  
   if (id === '') {
     data.inspeksi.push({ id: Date.now(), ...item });
-    const bIdx = data.barang.findIndex(b => b.sku === sku);
+    
+    // Logika Otomatis Update Barang
     if (bIdx !== -1) {
-      if (item.hasil === 'Berfungsi Baik') data.barang[bIdx].kondisi = 'Baik';
-      else if (item.hasil === 'Perlu Perbaikan') data.barang[bIdx].kondisi = 'Perlu Perbaikan';
-      else if (item.hasil === 'Rusak Total') data.barang[bIdx].kondisi = 'Rusak';
+      if (hasil === 'Berfungsi Baik') data.barang[bIdx].kondisi = 'Baik';
+      else if (hasil === 'Perlu Perbaikan') { data.barang[bIdx].kondisi = 'Perlu Perbaikan'; data.barang[bIdx].frekuensiPerbaikan = (data.barang[bIdx].frekuensiPerbaikan || 0) + 1; }
+      else if (hasil === 'Dalam Perbaikan') { data.barang[bIdx].kondisi = 'Dalam Perbaikan'; data.barang[bIdx].frekuensiPerbaikan = (data.barang[bIdx].frekuensiPerbaikan || 0) + 1; }
+      else if (hasil === 'Rusak Total') data.barang[bIdx].kondisi = 'Rusak';
     }
     toast('Inspeksi dicatat!', 'success');
   } else {
     const idx = data.inspeksi.findIndex(i => i.id === parseInt(id));
-    if (idx !== -1) data.inspeksi[idx] = { ...data.inspeksi[idx], ...item };
-    toast('Inspeksi diperbarui!', 'success');
+    
+    if (idx !== -1) {
+      oldHasil = data.inspeksi[idx].hasil;
+      data.inspeksi[idx] = { ...data.inspeksi[idx], ...item };
+      
+      // Logika Sinkronisasi saat Edit
+      if (bIdx !== -1) {
+        if (hasil === 'Berfungsi Baik') {
+          data.barang[bIdx].kondisi = 'Baik'; // Otomatis sembuh dari bug dashboard
+        } else if (hasil === 'Perlu Perbaikan') {
+          data.barang[bIdx].kondisi = 'Perlu Perbaikan';
+          if (oldHasil !== 'Perlu Perbaikan') data.barang[bIdx].frekuensiPerbaikan = (data.barang[bIdx].frekuensiPerbaikan || 0) + 1;
+        } else if (hasil === 'Dalam Perbaikan') {
+          data.barang[bIdx].kondisi = 'Dalam Perbaikan';
+          if (oldHasil !== 'Dalam Perbaikan') data.barang[bIdx].frekuensiPerbaikan = (data.barang[bIdx].frekuensiPerbaikan || 0) + 1;
+        } else if (hasil === 'Rusak Total') {
+          data.barang[bIdx].kondisi = 'Rusak';
+        }
+      }
+    }
+    toast('Inspeksi diperbarui & data alat disesuaikan!', 'success');
   }
+  
   saveDataToCloud();
   closeModal('modalInspeksi');
   renderInspeksi();
@@ -2308,7 +2343,7 @@ function renderInspeksi() {
   }
   tbody.innerHTML = list.map(i => {
     const b = data.barang.find(x => x.sku === i.sku);
-    const badge = i.hasil === 'Berfungsi Baik' ? 'badge-green' : i.hasil === 'Perlu Perbaikan' ? 'badge-orange' : 'badge-red';
+    const badge = i.hasil === 'Berfungsi Baik' ? 'badge-green' : i.hasil === 'Perlu Perbaikan' ? 'badge-orange' : i.hasil === 'Dalam Perbaikan' ? 'badge-yellow' : 'badge-red';
     return `<tr>
       <td>${i.tanggal}</td>
       <td><b>${i.sku}</b><br><small style="color:var(--text-3)">${b ? b.nama : '-'}</small></td>
@@ -3195,22 +3230,75 @@ function renderStok() {
   }).join('');
 }
 
-function exportCSV() {
+function exportStokExcel() {
   if (data.barang.length === 0) { toast('Tidak ada data', 'error'); return; }
-  let csv = 'SKU,Nama,Kategori,Satuan,Stok Awal,Masuk,Keluar,Stok Akhir,Status\n';
+  
+  // Buat HTML Table dengan inline CSS agar rapi di Excel
+  let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="utf-8">
+      <style>
+        table { border-collapse: collapse; font-family: 'Segoe UI', sans-serif; font-size: 12px; }
+        th { background-color: #4F81BD; color: white; font-weight: bold; padding: 10px; border: 1px solid #000; text-align: center; }
+        td { padding: 8px; border: 1px solid #000; vertical-align: middle; }
+        .status-aman { background-color: #C6EFCE; color: #006100; font-weight: bold; text-align: center; }
+        .status-menipis { background-color: #FFEB9C; color: #9C6500; font-weight: bold; text-align: center; }
+        .status-habis { background-color: #FFC7CE; color: #9C0006; font-weight: bold; text-align: center; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .title { font-size: 18px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+      </style>
+    </head>
+    <body>
+      <div class="title">LAPORAN STOK GUDANG - PT TRIMATA LIGUNA</div>
+      <div style="text-align:center; margin-bottom:15px; font-size:12px; color:#555;">Dicetak pada: ${new Date().toLocaleString('id-ID')}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Nama Barang</th>
+            <th>Kategori</th>
+            <th>Stok Awal</th>
+            <th>Total Masuk</th>
+            <th>Total Keluar</th>
+            <th>Stok Akhir</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>`;
+        
   data.barang.forEach(b => {
     const masuk = data.transaksi.filter(t => t.sku === b.sku && t.tipe === 'masuk').reduce((s,t) => s + t.jumlah, 0);
     const keluar = data.transaksi.filter(t => t.sku === b.sku && t.tipe === 'keluar').reduce((s,t) => s + t.jumlah, 0);
     const akhir = b.stokAwal + masuk - keluar;
-    const status = akhir <= 0 ? 'Habis' : akhir <= 10 ? 'Menipis' : 'Aman';
-    csv += `"${b.sku}","${b.nama}","${b.kategori}","${b.satuan}",${b.stokAwal},${masuk},${keluar},${akhir},"${status}"\n`;
+    
+    let statusClass = 'status-aman';
+    let statusText = 'Aman';
+    if (akhir <= 0) { statusClass = 'status-habis'; statusText = 'Habis'; }
+    else if (akhir <= 10) { statusClass = 'status-menipis'; statusText = 'Menipis'; }
+
+    html += `
+      <tr>
+        <td class="text-center">${b.sku}</td>
+        <td>${b.nama}</td>
+        <td>${b.kategori}</td>
+        <td class="text-center">${b.stokAwal}</td>
+        <td class="text-center" style="color:#006100;">+${masuk}</td>
+        <td class="text-center" style="color:#9C6500;">-${keluar}</td>
+        <td class="text-center"><b>${akhir}</b> ${b.satuan}</td>
+        <td class="${statusClass}">${statusText}</td>
+      </tr>`;
   });
-  const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+  
+  html += `</tbody></table></body></html>`;
+  
+  const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `Laporan_Stok_${today()}.csv`;
+  link.download = `Laporan_Stok_Rapi_${today()}.xls`;
   link.click();
-  toast('Laporan di-export!', 'success');
+  toast('Laporan Excel (Rapi) berhasil diunduh!', 'success');
 }
 // ================= SECTION FITUR LAPORAN STOK END =================
 
@@ -3488,16 +3576,45 @@ function hapusClosing(timestamp) {
   renderClosing();
 }
 
-function exportClosingCSV() {
+function exportClosingExcel() {
   const bulan = parseInt(document.getElementById('closingBulan').value);
   const tahun = parseInt(document.getElementById('closingTahun').value);
   const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][bulan - 1];
   
   if (data.barang.length === 0) { toast('Tidak ada data', 'error'); return; }
   
-  let csv = `Laporan Closing Stok - ${namaBulan} ${tahun}\n\n`;
-  csv += 'SKU,Nama Barang,Kategori,Satuan,Saldo Awal,Masuk,Keluar,Saldo Akhir\n';
-  
+  let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="utf-8">
+      <style>
+        table { border-collapse: collapse; font-family: 'Segoe UI', sans-serif; font-size: 12px; }
+        th { background-color: #4F81BD; color: white; font-weight: bold; padding: 10px; border: 1px solid #000; text-align: center; }
+        td { padding: 8px; border: 1px solid #000; vertical-align: middle; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .title { font-size: 18px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .total-row { background-color: #E5E7EB; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      <div class="title">LAPORAN CLOSING STOK - ${namaBulan.toUpperCase()} ${tahun}</div>
+      <div style="text-align:center; margin-bottom:15px; font-size:12px; color:#555;">PT TRIMATA LIGUNA | Dicetak pada: ${new Date().toLocaleString('id-ID')}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Nama Barang</th>
+            <th>Kategori</th>
+            <th>Saldo Awal</th>
+            <th>Total Masuk</th>
+            <th>Total Keluar</th>
+            <th>Saldo Akhir</th>
+            <th>Satuan</th>
+          </tr>
+        </thead>
+        <tbody>`;
+        
   let totalAwal = 0, totalMasuk = 0, totalKeluar = 0, totalAkhir = 0;
   
   data.barang.forEach(b => {
@@ -3516,18 +3633,37 @@ function exportClosingCSV() {
     totalMasuk += masuk;
     totalKeluar += keluar;
     totalAkhir += saldoAkhir;
-    
-    csv += `"${b.sku}","${b.nama}","${b.kategori}","${b.satuan}",${saldoAwal},${masuk},${keluar},${saldoAkhir}\n`;
+
+    html += `
+      <tr>
+        <td class="text-center">${b.sku}</td>
+        <td>${b.nama}</td>
+        <td>${b.kategori}</td>
+        <td class="text-center">${saldoAwal}</td>
+        <td class="text-center" style="color:#006100;">+${masuk}</td>
+        <td class="text-center" style="color:#9C6500;">-${keluar}</td>
+        <td class="text-center"><b>${saldoAkhir}</b></td>
+        <td class="text-center">${b.satuan}</td>
+      </tr>`;
   });
   
-  csv += `"","","","",${totalAwal},${totalMasuk},${totalKeluar},${totalAkhir}\n`;
+  html += `
+      <tr class="total-row">
+        <td colspan="3" class="text-right">TOTAL</td>
+        <td class="text-center">${totalAwal}</td>
+        <td class="text-center">+${totalMasuk}</td>
+        <td class="text-center">-${totalKeluar}</td>
+        <td class="text-center">${totalAkhir}</td>
+        <td></td>
+      </tr>
+    </tbody></table></body></html>`;
   
-  const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `Closing_Stok_${namaBulan}_${tahun}.csv`;
+  link.download = `Closing_Stok_${namaBulan}_${tahun}_Rapi.xls`;
   link.click();
-  toast(`Laporan ${namaBulan} ${tahun} di-export!`, 'success');
+  toast(`Laporan Excel (Rapi) diunduh!`, 'success');
 }
 // ================= SECTION FITUR CLOSING END =================
 
@@ -3575,6 +3711,68 @@ function renderRiwayat() {
     </tr>`;
   }).join('');
 }
+
+function exportRiwayatExcel() {
+  if (data.transaksi.length === 0) { toast('Tidak ada data', 'error'); return; }
+  
+  let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="utf-8">
+      <style>
+        table { border-collapse: collapse; font-family: 'Segoe UI', sans-serif; font-size: 12px; }
+        th { background-color: #4F81BD; color: white; font-weight: bold; padding: 10px; border: 1px solid #000; text-align: center; }
+        td { padding: 8px; border: 1px solid #000; vertical-align: middle; }
+        .badge-masuk { background-color: #C6EFCE; color: #006100; font-weight: bold; text-align: center; }
+        .badge-keluar { background-color: #FFEB9C; color: #9C6500; font-weight: bold; text-align: center; }
+        .text-center { text-align: center; }
+        .title { font-size: 18px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+      </style>
+    </head>
+    <body>
+      <div class="title">RIWAYAT TRANSAKSI GUDANG - PT TRIMATA LIGUNA</div>
+      <div style="text-align:center; margin-bottom:15px; font-size:12px; color:#555;">Dicetak pada: ${new Date().toLocaleString('id-ID')}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Tipe</th>
+            <th>SKU</th>
+            <th>Nama Barang</th>
+            <th>Jumlah</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>`;
+        
+  const sortedData = [...data.transaksi].sort((a,b) => b.tanggal.localeCompare(a.tanggal) || b.id - a.id);
+  
+  sortedData.forEach(t => {
+    const b = data.barang.find(x => x.sku === t.sku);
+    const badgeClass = t.tipe === 'masuk' ? 'badge-masuk' : 'badge-keluar';
+    const tipeText = t.tipe.charAt(0).toUpperCase() + t.tipe.slice(1);
+    const ket = [t.pihak, t.dokumen, t.catatan].filter(Boolean).join(' • ') || '-';
+    
+    html += `
+      <tr>
+        <td class="text-center">${t.tanggal}</td>
+        <td class="${badgeClass}">${tipeText}</td>
+        <td class="text-center">${t.sku}</td>
+        <td>${b ? b.nama : '-'}</td>
+        <td class="text-center"><b>${t.jumlah}</b> ${b ? b.satuan : ''}</td>
+        <td>${ket}</td>
+      </tr>`;
+  });
+  
+  html += `</tbody></table></body></html>`;
+  
+  const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `Riwayat_Transaksi_Rapi_${today()}.xls`;
+  link.click();
+  toast('Riwayat Excel (Rapi) berhasil diunduh!', 'success');
+}
 // ================= SECTION FITUR RIWAYAT END =================
 
 // ================= SECTION FITUR BACKUP START =================
@@ -3593,7 +3791,7 @@ function backupData() {
   link.href = URL.createObjectURL(blob);
   link.download = `WMS_Backup_${today()}.json`;
   link.click();
-  toast('Backup didownload!', 'success');
+  toast('Backup file .json didownload!', 'success');
 }
 
 function restoreData(event) {
@@ -3604,7 +3802,7 @@ function restoreData(event) {
     try {
       const p = JSON.parse(e.target.result);
       if (!p.barang || !Array.isArray(p.barang)) throw new Error('Format tidak valid');
-      if (!confirm('Restore data? Data saat ini akan DIGANTI.')) return;
+      if (!confirm('Restore data? Data saat ini di Cloud akan DIGANTI.')) return;
       
       data.barang = p.barang || [];
       data.transaksi = p.transaksi || [];
@@ -3649,7 +3847,7 @@ function renderDashboard() {
   document.getElementById('statMasuk').innerHTML = `${masukHari}<small>unit</small>`;
   document.getElementById('statKeluar').innerHTML = `${keluarHari}<small>unit</small>`;
   
-  const rusak = data.barang.filter(b => b.kondisi === 'Rusak' || b.kondisi === 'Perlu Perbaikan').length;
+  const rusak = data.barang.filter(b => b.kondisi === 'Rusak' || b.kondisi === 'Perlu Perbaikan' || b.kondisi === 'Dalam Perbaikan').length;
   document.getElementById('statRusak').innerHTML = `${rusak}<small>alat</small>`;
   
   const pending = data.sparepart.filter(s => s.status === 'pending').length 
@@ -3677,7 +3875,7 @@ function renderDashboard() {
         </div>`
       ).join('')}</div>`;
   
-  const perhatian = data.barang.filter(b => ['Rusak', 'Perlu Perbaikan'].includes(b.kondisi));
+  const perhatian = data.barang.filter(b => ['Rusak', 'Perlu Perbaikan', 'Dalam Perbaikan'].includes(b.kondisi));
   document.getElementById('alatPerhatian').innerHTML = perhatian.length === 0
     ? '<div class="empty">Semua alat berfungsi baik</div>'
     : `<div class="tbl-wrap"><table><thead><tr><th>Nama Alat</th><th>Kondisi</th><th>Lokasi</th></tr></thead><tbody>${
@@ -3700,7 +3898,7 @@ function renderDashboard() {
 document.getElementById('today').textContent = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'short', year:'numeric' });
 
 // Aplikasi akan merender UI kosong dulu, lalu data akan otomatis terisi
-// setelah Firebase selesai memuat data dari Cloud (lihat event 'firebaseReady' di atas).
+// setelah Firebase selesai memuat data dari Cloud.
 renderAll();
 initClosingYears();
 
