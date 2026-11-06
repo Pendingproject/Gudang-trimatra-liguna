@@ -24,11 +24,248 @@
       radial-gradient(circle at 15% 15%, rgba(99,102,241,.08) 0%, transparent 45%),
       radial-gradient(circle at 85% 85%, rgba(139,92,246,.08) 0%, transparent 45%);
     background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  /* ================= LOGIN SCREEN START ================= */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0f;
+    z-index: 9999;
+    overflow: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
   }
   
-  .app { display:flex; min-height:100vh; }
+  #loginScreen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* Animated Background */
+  .login-bg {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(99,102,241,.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(139,92,246,.15) 0%, transparent 40%);
+    z-index: 1;
+  }
+  
+  .particle {
+    position: absolute;
+    background: rgba(99,102,241,.4);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: float 8s infinite ease-in-out;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+    50% { transform: translateY(-30px) scale(1.2); opacity: 0.8; }
+  }
+
+  /* Login Card */
+  .login-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+    background: rgba(18, 18, 26, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px 35px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
+    animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  
+  @keyframes cardAppear {
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .login-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: #fff;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--accent-glow);
+    animation: pulseLogo 3s infinite ease-in-out;
+  }
+  
+  @keyframes pulseLogo {
+    0%, 100% { transform: scale(1); box-shadow: 0 10px 30px var(--accent-glow); }
+    50% { transform: scale(1.05); box-shadow: 0 15px 40px var(--accent-glow); }
+  }
+  
+  .login-logo img { width: 100%; height: 100%; object-fit: cover; }
+  
+  .login-header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  
+  .login-header p {
+    font-size: 13px;
+    color: var(--text-3);
+    font-weight: 500;
+  }
+
+  .login-form .input-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .login-form label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-2);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  
+  .login-form input {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    background: rgba(10, 10, 15, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 14px;
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  .login-form input::placeholder { color: var(--text-3); }
+  
+  .login-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(10, 10, 15, 0.9);
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-3);
+    fill: none;
+    stroke-width: 2;
+    transition: stroke 0.3s;
+  }
+  
+  .login-form input:focus ~ .input-icon { stroke: var(--accent); }
+  
+  .login-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px var(--accent-glow);
+  }
+  
+  .login-btn:active { transform: translateY(0); }
+  
+  .login-btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+  
+  .login-btn.loading .btn-text { opacity: 0; }
+  
+  .spinner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    opacity: 0;
+  }
+  
+  .login-btn.loading .spinner { opacity: 1; }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  .login-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    animation: shake 0.5s ease;
+  }
+  
+  .login-error.show { display: flex; }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  
+  .login-footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 11px;
+    color: var(--text-3);
+  }
+  /* ================= LOGIN SCREEN END ================= */
+
+  /* ================= APP WRAPPER (Hidden by default) ================= */
+  #appContent { display: none; }
+  #appContent.show { display: block; }
 
   /* ================= SIDEBAR START ================= */
+  .app { display:flex; min-height:100vh; }
   .sidebar {
     width: 260px; background: linear-gradient(180deg, #12121a 0%, #0f0f16 100%);
     border-right: 1px solid var(--border); padding: 20px 0;
@@ -81,6 +318,24 @@
   }
   .status-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+
+  .logout-btn {
+    margin: 10px 12px 0;
+    padding: 10px 14px;
+    background: rgba(239,68,68,.1);
+    border: 1px solid rgba(239,68,68,.2);
+    color: #f87171;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .logout-btn:hover { background: rgba(239,68,68,.2); }
+  .logout-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
   /* ================= SIDEBAR END ================= */
 
   /* ================= MAIN HEADER START ================= */
@@ -501,6 +756,8 @@
     .nav-item.active::before { display: none; }
     .main { margin-left: 65px; padding: 18px 14px; }
     .header-left h2 { font-size: 20px; }
+    .logout-btn span { display: none; }
+    .logout-btn { justify-content: center; padding: 10px; }
   }
   @media(max-width: 500px) {
     .stat-value { font-size: 22px; }
@@ -513,717 +770,771 @@
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- ================= SECTION SIDEBAR START ================= -->
-  <div class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">
+<!-- ================= SECTION LOGIN SCREEN START ================= -->
+<div id="loginScreen">
+  <div class="login-bg" id="particles"></div>
+  
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBz2OfbFnOBtqYgUelV2ehatIKLAL0M-FirBINPJMKY-t1NtwoKG5xOxBr6PPy5X_qn1Cf1eP2AaMtFd6BAPeT1FjGH6l4V5qVWco744r5eVGqAKwaos-E0EFF-sUp4LhBb8KetrGIiZLWln8bVDL5ZTdkLmcyKwHFTw7JfAxcO6l8htRyP_D6w45Ojkgc/s1600/pt-trimatra-liguna-629.jpg" alt="PT Trimata Liguna">
       </div>
-      <div class="brand-text">
-        <h1>PT Trimata Liguna</h1>
-        <p>Gudang & Logistik</p>
+      <h1>PT Trimata Liguna</h1>
+      <p>Sistem Manajemen Gudang & Logistik</p>
+    </div>
+    
+    <div class="login-error" id="loginError">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Username atau Password salah!</span>
+    </div>
+
+    <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" placeholder="Masukkan username" autocomplete="off" required>
+        <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
-    </div>
+      
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="Masukkan password" required>
+        <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      
+      <button type="submit" class="login-btn" id="btnLogin">
+        <span class="btn-text">Masuk ke Dashboard</span>
+        <div class="spinner"></div>
+      </button>
+    </form>
     
-    <div class="nav-section">Utama</div>
-    <div class="nav-item active" data-page="dashboard">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-      <span>Dashboard</span>
-    </div>
-    
-    <div class="nav-section">Inventori</div>
-    <div class="nav-item" data-page="barang">
-      <svg viewBox="0 0 24 24"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
-      <span>Master Barang & Alat</span>
-    </div>
-    <div class="nav-item" data-page="masuk">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      <span>Barang Masuk</span>
-    </div>
-    <div class="nav-item" data-page="keluar">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <span>Barang Keluar</span>
-    </div>
-    <div class="nav-item" data-page="scaffolding">
-      <svg viewBox="0 0 24 24"><line x1="3" y1="3" x2="21" y2="3"/><line x1="3" y1="21" x2="21" y2="21"/><line x1="6" y1="3" x2="6" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="15" x2="18" y2="15"/></svg>
-      <span>Data Scaffolding</span>
-    </div>
-    
-    <div class="nav-section">Operasional</div>
-    <div class="nav-item" data-page="inspeksi">
-      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-      <span>Inspeksi Alat</span>
-    </div>
-    <div class="nav-item" data-page="sparepart">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      <span>Permintaan Sparepart</span>
-    </div>
-    <div class="nav-item" data-page="pengiriman">
-      <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      <span>Pengiriman Proyek</span>
-    </div>
-    <div class="nav-item" data-page="suratjalan">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <span>Surat Jalan</span>
-    </div>
-    
-    <div class="nav-section">Fasilitas</div>
-    <div class="nav-item" data-page="kebersihan">
-      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="6" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="6" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg>
-      <span>Checklist Kebersihan</span>
-    </div>
-    <div class="nav-item" data-page="pemeliharaan">
-      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg>
-      <span>Pemeliharaan Gedung</span>
-    </div>
-    
-    <div class="nav-section">Laporan</div>
-    <div class="nav-item" data-page="stok">
-      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      <span>Laporan Stok</span>
-    </div>
-    <div class="nav-item" data-page="closing">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 11 17 15 13"/></svg>
-      <span>Closing Bulanan</span>
-    </div>
-    <div class="nav-item" data-page="riwayat">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>Riwayat Transaksi</span>
-    </div>
-    <div class="nav-item" data-page="backup">
-      <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-      <span>Backup / Restore</span>
-    </div>
-    
-    <div class="sidebar-footer">
-      <div class="status-dot"></div>
-      <span>Sistem Aktif (Cloud)</span>
+    <div class="login-footer">
+      &copy; 2026 PT Trimata Liguna. All rights reserved.
     </div>
   </div>
-  <!-- ================= SECTION SIDEBAR END ================= -->
+</div>
+<!-- ================= SECTION LOGIN SCREEN END ================= -->
 
-  <!-- ================= SECTION MAIN CONTENT START ================= -->
-  <div class="main">
-    
-    <!-- ================= SECTION HEADER START ================= -->
-    <div class="header">
-      <div class="header-left">
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
-          <div style="width:42px; height:42px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px solid var(--border-hi); box-shadow:0 3px 14px rgba(0,0,0,.4); flex-shrink:0;">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBz2OfbFnOBtqYgUelV2ehatIKLAL0M-FirBINPJMKY-t1NtwoKG5xOxBr6PPy5X_qn1Cf1eP2AaMtFd6BAPeT1FjGH6l4V5qVWco744r5eVGqAKwaos-E0EFF-sUp4LhBb8KetrGIiZLWln8bVDL5ZTdkLmcyKwHFTw7JfAxcO6l8htRyP_D6w45Ojkgc/s1600/pt-trimatra-liguna-629.jpg" alt="PT Trimata Liguna" style="width:100%; height:100%; object-fit:cover;">
-          </div>
-          <div>
-            <div style="font-size:10.5px; font-weight:700; color:var(--accent); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:2px;">PT TRIMATA LIGUNA</div>
-            <h2 id="pageTitle" style="margin:0;">Dashboard</h2>
-          </div>
-        </div>
-        <p id="pageSubtitle" style="margin-left:56px;">Ringkasan aktivitas gudang & logistik</p>
-      </div>
-      <div class="header-right">
-        <div class="save-indicator" id="saveIndicator">
-          <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          <span id="saveText">Tersimpan</span>
-        </div>
-        <div class="date-chip">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <span id="today"></span>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION HEADER END ================= -->
+<!-- ================= SECTION APP CONTENT START ================= -->
+<div id="appContent">
+  <div class="app">
 
-    <!-- ================= SECTION DASHBOARD START ================= -->
-    <div class="page active" id="page-dashboard">
-      <div class="cards">
-        <div class="stat-card c1">
-          <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div></div>
-          <div class="stat-label">Total Item</div>
-          <div class="stat-value" id="statItem">0<small>SKU</small></div>
+    <!-- ================= SECTION SIDEBAR START ================= -->
+    <div class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBz2OfbFnOBtqYgUelV2ehatIKLAL0M-FirBINPJMKY-t1NtwoKG5xOxBr6PPy5X_qn1Cf1eP2AaMtFd6BAPeT1FjGH6l4V5qVWco744r5eVGqAKwaos-E0EFF-sUp4LhBb8KetrGIiZLWln8bVDL5ZTdkLmcyKwHFTw7JfAxcO6l8htRyP_D6w45Ojkgc/s1600/pt-trimatra-liguna-629.jpg" alt="PT Trimata Liguna">
         </div>
-        <div class="stat-card c2">
-          <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div></div>
-          <div class="stat-label">Total Stok</div>
-          <div class="stat-value" id="statStok">0<small>unit</small></div>
-        </div>
-        <div class="stat-card c3">
-          <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div></div>
-          <div class="stat-label">Masuk Hari Ini</div>
-          <div class="stat-value" id="statMasuk">0<small>unit</small></div>
-        </div>
-        <div class="stat-card c4">
-          <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div></div>
-          <div class="stat-label">Keluar Hari Ini</div>
-          <div class="stat-value" id="statKeluar">0<small>unit</small></div>
-        </div>
-        <div class="stat-card c5">
-          <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div></div>
-          <div class="stat-label">Alat Rusak</div>
-          <div class="stat-value" id="statRusak">0<small>unit</small></div>
-        </div>
-        <div class="stat-card c6">
-          <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
-          <div class="stat-label">Tugas Pending</div>
-          <div class="stat-value" id="statPending">0<small>tugas</small></div>
+        <div class="brand-text">
+          <h1>PT Trimata Liguna</h1>
+          <p>Gudang & Logistik</p>
         </div>
       </div>
       
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Tugas & Pengingat Hari Ini</div>
-        </div>
-        <div id="todayTasks"></div>
+      <div class="nav-section">Utama</div>
+      <div class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span>Dashboard</span>
       </div>
       
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Alat Perlu Perhatian</div>
-        </div>
-        <div id="alatPerhatian"></div>
+      <div class="nav-section">Inventori</div>
+      <div class="nav-item" data-page="barang">
+        <svg viewBox="0 0 24 24"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+        <span>Master Barang & Alat</span>
+      </div>
+      <div class="nav-item" data-page="masuk">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Barang Masuk</span>
+      </div>
+      <div class="nav-item" data-page="keluar">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Barang Keluar</span>
+      </div>
+      <div class="nav-item" data-page="scaffolding">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="3" x2="21" y2="3"/><line x1="3" y1="21" x2="21" y2="21"/><line x1="6" y1="3" x2="6" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="15" x2="18" y2="15"/></svg>
+        <span>Data Scaffolding</span>
       </div>
       
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Stok Menipis</div>
-        </div>
-        <div id="lowStockList"></div>
+      <div class="nav-section">Operasional</div>
+      <div class="nav-item" data-page="inspeksi">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span>Inspeksi Alat</span>
+      </div>
+      <div class="nav-item" data-page="sparepart">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Permintaan Sparepart</span>
+      </div>
+      <div class="nav-item" data-page="pengiriman">
+        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span>Pengiriman Proyek</span>
+      </div>
+      <div class="nav-item" data-page="suratjalan">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Surat Jalan</span>
+      </div>
+      
+      <div class="nav-section">Fasilitas</div>
+      <div class="nav-item" data-page="kebersihan">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="6" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="6" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg>
+        <span>Checklist Kebersihan</span>
+      </div>
+      <div class="nav-item" data-page="pemeliharaan">
+        <svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg>
+        <span>Pemeliharaan Gedung</span>
+      </div>
+      
+      <div class="nav-section">Laporan</div>
+      <div class="nav-item" data-page="stok">
+        <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span>Laporan Stok</span>
+      </div>
+      <div class="nav-item" data-page="closing">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 11 17 15 13"/></svg>
+        <span>Closing Bulanan</span>
+      </div>
+      <div class="nav-item" data-page="riwayat">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Riwayat Transaksi</span>
+      </div>
+      <div class="nav-item" data-page="backup">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+        <span>Backup / Restore</span>
+      </div>
+      
+      <button class="logout-btn" onclick="handleLogout()">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Logout</span>
+      </button>
+
+      <div class="sidebar-footer">
+        <div class="status-dot"></div>
+        <span>Sistem Aktif (Cloud)</span>
       </div>
     </div>
-    <!-- ================= SECTION DASHBOARD END ================= -->
+    <!-- ================= SECTION SIDEBAR END ================= -->
 
-    <!-- ================= SECTION MASTER BARANG START ================= -->
-    <div class="page" id="page-barang">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>Master Barang & Alat</div>
-          <button class="btn btn-primary" onclick="openBarangModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Barang
-          </button>
-        </div>
-        <div class="alert alert-info" style="margin-bottom:14px;">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Kode/SKU <b>tidak wajib</b> diisi. Kosongkan jika belum dapat kode dari finance — akan otomatis dibuatkan, bisa diedit nanti.</div>
-        </div>
-        
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchBarang" placeholder="Cari nama, SKU, kategori..." oninput="renderBarang()">
-          </div>
-          <select id="filterKategori" class="filter-select" onchange="renderBarang()">
-            <option value="">Semua Kategori</option>
-            <option value="Alat">Alat</option>
-            <option value="Scaffolding">Scaffolding</option>
-            <option value="Aset">Aset Perusahaan</option>
-            <option value="Material">Material</option>
-            <option value="Sparepart">Sparepart</option>
-            <option value="Kemasan">Kemasan</option>
-            <option value="ATK">ATK</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-          <select id="filterKondisi" class="filter-select" onchange="renderBarang()">
-            <option value="">Semua Kondisi</option>
-            <option value="Baik">Baik</option>
-            <option value="Perlu Perbaikan">Perlu Perbaikan</option>
-            <option value="Dalam Perbaikan">Dalam Perbaikan</option>
-            <option value="Rusak">Rusak</option>
-          </select>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>SKU</th><th>Nama</th><th>Kategori</th><th>Kondisi</th><th>Stok</th><th>Riwayat Perbaikan</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyBarang"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION MASTER BARANG END ================= -->
-
-    <!-- ================= SECTION BARANG MASUK START ================= -->
-    <div class="page" id="page-masuk">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Barang Masuk</div>
-          <button class="btn btn-success" onclick="openTrxModal('masuk')">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Catat Masuk
-          </button>
-        </div>
-        
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchMasuk" placeholder="Cari nama barang, supplier, dokumen..." oninput="renderTrx('masuk')">
-          </div>
-          <input type="date" id="filterTglMasuk" class="filter-select" style="max-width:160px;" onchange="renderTrx('masuk')">
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('searchMasuk').value='';document.getElementById('filterTglMasuk').value='';renderTrx('masuk')">Reset</button>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tanggal</th><th>Barang</th><th>Jumlah</th><th>Supplier</th><th>Dokumen</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyMasuk"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION BARANG MASUK END ================= -->
-
-    <!-- ================= SECTION BARANG KELUAR START ================= -->
-    <div class="page" id="page-keluar">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Barang Keluar</div>
-          <button class="btn btn-warning" onclick="openTrxModal('keluar')">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Catat Keluar
-          </button>
-        </div>
-        
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchKeluar" placeholder="Cari nama barang, tujuan, dokumen..." oninput="renderTrx('keluar')">
-          </div>
-          <input type="date" id="filterTglKeluar" class="filter-select" style="max-width:160px;" onchange="renderTrx('keluar')">
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('searchKeluar').value='';document.getElementById('filterTglKeluar').value='';renderTrx('keluar')">Reset</button>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tanggal</th><th>Barang</th><th>Jumlah</th><th>Tujuan</th><th>Dokumen</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyKeluar"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION BARANG KELUAR END ================= -->
-
-    <!-- ================= SECTION SCAFFOLDING START ================= -->
-    <div class="page" id="page-scaffolding">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><line x1="3" y1="3" x2="21" y2="3"/><line x1="3" y1="21" x2="21" y2="21"/><line x1="6" y1="3" x2="6" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="15" x2="18" y2="15"/></svg>Data Scaffolding</div>
-          <button class="btn btn-primary" onclick="openScaffoldingModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Scaffolding
-          </button>
-        </div>
-        <div class="alert alert-info" style="margin-bottom:14px;">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Catat detail scaffolding: jenis, ukuran, jumlah, kondisi, dan lokasi penyimpanan.</div>
-        </div>
-
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchScaffolding" placeholder="Cari jenis, lokasi..." oninput="renderScaffolding()">
-          </div>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Jenis</th><th>Ukuran</th><th>Jumlah Total</th><th>Baik</th><th>Rusak</th><th>Lokasi</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyScaffolding"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION SCAFFOLDING END ================= -->
-
-    <!-- ================= SECTION INSPEKSI ALAT START ================= -->
-    <div class="page" id="page-inspeksi">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Inspeksi Alat (Kerjasama Mekanik)</div>
-          <button class="btn btn-primary" onclick="openInspeksiModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Catat Inspeksi
-          </button>
-        </div>
-
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchInspeksi" placeholder="Cari nama alat, mekanik..." oninput="renderInspeksi()">
-          </div>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tanggal</th><th>Alat</th><th>Mekanik</th><th>Hasil</th><th>Catatan</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyInspeksi"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION INSPEKSI ALAT END ================= -->
-
-    <!-- ================= SECTION SPAREPART START ================= -->
-    <div class="page" id="page-sparepart">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Permintaan Sparepart (dari Mekanik)</div>
-          <button class="btn btn-primary" onclick="openSparepartModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Permintaan
-          </button>
-        </div>
-        
-        <div class="alert alert-warning" style="margin-bottom:14px;">
-          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div>Ringkasan sparepart yang diminta mekanik untuk perbaikan alat. Bisa diteruskan ke finance/purchasing.</div>
-        </div>
-
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchSparepart" placeholder="Cari sparepart, alat, mekanik..." oninput="renderSparepart()">
-          </div>
-        </div>
-
-        <div class="tabs" id="sparepartTabs">
-          <button class="tab-btn active" onclick="filterSparepart('all', this)">Semua</button>
-          <button class="tab-btn" onclick="filterSparepart('pending', this)">Pending</button>
-          <button class="tab-btn" onclick="filterSparepart('disetujui', this)">Disetujui</button>
-          <button class="tab-btn" onclick="filterSparepart('dibeli', this)">Sudah Dibeli</button>
-        </div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tanggal</th><th>Nama Sparepart</th><th>Untuk Alat</th><th>Qty</th><th>Diminta Oleh</th><th>Status</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodySparepart"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION SPAREPART END ================= -->
-
-    <!-- ================= SECTION PENGIRIMAN START ================= -->
-    <div class="page" id="page-pengiriman">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Pengiriman ke Proyek</div>
-          <button class="btn btn-primary" onclick="openPengirimanModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Catat Pengiriman
-          </button>
-        </div>
-
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchPengiriman" placeholder="Cari proyek, barang, kendaraan..." oninput="renderPengiriman()">
-          </div>
-          <select id="filterStatusPengiriman" class="filter-select" onchange="renderPengiriman()">
-            <option value="">Semua Status</option>
-            <option value="Menunggu">Menunggu</option>
-            <option value="Dikirim">Sedang Dikirim</option>
-            <option value="Terkirim">Terkirim</option>
-          </select>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tanggal</th><th>Tujuan Proyek</th><th>Barang</th><th>Jumlah</th><th>Kendaraan</th><th>Status</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyPengiriman"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION PENGIRIMAN END ================= -->
-
-    <!-- ================= SECTION SURAT JALAN START ================= -->
-    <div class="page" id="page-suratjalan">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Surat Jalan</div>
-          <button class="btn btn-primary" onclick="openSuratJalanModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Buat Surat Jalan
-          </button>
-        </div>
-        
-        <div class="alert alert-info" style="margin-bottom:14px;">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Nomor SJ otomatis (format: <b>SJ/001/TML/XI/2026</b>). Stok barang <b>otomatis berkurang</b> saat SJ disimpan. Hapus SJ = stok otomatis kembali.</div>
-        </div>
-
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchSuratJalan" placeholder="Cari no SJ, tujuan, driver..." oninput="renderSuratJalan()">
-          </div>
-          <select id="filterStatusSJ" class="filter-select" onchange="renderSuratJalan()">
-            <option value="">Semua Status</option>
-            <option value="Draft">Draft</option>
-            <option value="Dikirim">Dikirim</option>
-            <option value="Diterima">Diterima</option>
-          </select>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>No. SJ</th><th>Tanggal</th><th>Tujuan</th><th>Kendaraan</th><th>Driver</th><th>Status</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodySuratJalan"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION SURAT JALAN END ================= -->
-
-    <!-- ================= SECTION KEBERSIHAN START ================= -->
-    <div class="page" id="page-kebersihan">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Checklist Kebersihan Gudang</div>
-        </div>
-        <div class="alert alert-info" style="margin-bottom:14px;">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Checklist harian — klik item untuk tandai selesai. Reset otomatis tiap hari.</div>
-        </div>
-        <div style="margin-bottom:14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-          <div style="font-size:13px; color:var(--text-2);">Tanggal: <b id="kebersihanDate" style="color:var(--text)"></b></div>
-          <button class="btn btn-ghost btn-sm" onclick="resetKebersihan()">Reset Checklist</button>
-        </div>
-        <div id="checklistKebersihan"></div>
-        <div style="margin-top:14px; padding:14px; background:var(--bg-3); border-radius:9px; display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:13px; color:var(--text-2);">Progress:</div>
-          <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:200px; height:8px; background:var(--bg-4); border-radius:4px; overflow:hidden;">
-              <div id="kebersihanProgressBar" style="height:100%; background:linear-gradient(90deg,var(--green),#059669); width:0%; transition:width .3s;"></div>
+    <!-- ================= SECTION MAIN CONTENT START ================= -->
+    <div class="main">
+      
+      <!-- ================= SECTION HEADER START ================= -->
+      <div class="header">
+        <div class="header-left">
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px solid var(--border-hi); box-shadow:0 3px 14px rgba(0,0,0,.4); flex-shrink:0;">
+              <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBz2OfbFnOBtqYgUelV2ehatIKLAL0M-FirBINPJMKY-t1NtwoKG5xOxBr6PPy5X_qn1Cf1eP2AaMtFd6BAPeT1FjGH6l4V5qVWco744r5eVGqAKwaos-E0EFF-sUp4LhBb8KetrGIiZLWln8bVDL5ZTdkLmcyKwHFTw7JfAxcO6l8htRyP_D6w45Ojkgc/s1600/pt-trimatra-liguna-629.jpg" alt="PT Trimata Liguna" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <b id="kebersihanProgress" style="color:var(--green); font-size:14px;">0%</b>
+            <div>
+              <div style="font-size:10.5px; font-weight:700; color:var(--accent); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:2px;">PT TRIMATA LIGUNA</div>
+              <h2 id="pageTitle" style="margin:0;">Dashboard</h2>
+            </div>
+          </div>
+          <p id="pageSubtitle" style="margin-left:56px;">Ringkasan aktivitas gudang & logistik</p>
+        </div>
+        <div class="header-right">
+          <div class="save-indicator" id="saveIndicator">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span id="saveText">Tersimpan</span>
+          </div>
+          <div class="date-chip">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="today"></span>
           </div>
         </div>
       </div>
-    </div>
-    <!-- ================= SECTION KEBERSIHAN END ================= -->
+      <!-- ================= SECTION HEADER END ================= -->
 
-    <!-- ================= SECTION PEMELIHARAAN START ================= -->
-    <div class="page" id="page-pemeliharaan">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg>Jadwal Pemeliharaan Gedung</div>
-          <button class="btn btn-primary" onclick="openPemeliharaanModal()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Jadwal
-          </button>
+      <!-- ================= SECTION DASHBOARD START ================= -->
+      <div class="page active" id="page-dashboard">
+        <div class="cards">
+          <div class="stat-card c1">
+            <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div></div>
+            <div class="stat-label">Total Item</div>
+            <div class="stat-value" id="statItem">0<small>SKU</small></div>
+          </div>
+          <div class="stat-card c2">
+            <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div></div>
+            <div class="stat-label">Total Stok</div>
+            <div class="stat-value" id="statStok">0<small>unit</small></div>
+          </div>
+          <div class="stat-card c3">
+            <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div></div>
+            <div class="stat-label">Masuk Hari Ini</div>
+            <div class="stat-value" id="statMasuk">0<small>unit</small></div>
+          </div>
+          <div class="stat-card c4">
+            <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div></div>
+            <div class="stat-label">Keluar Hari Ini</div>
+            <div class="stat-value" id="statKeluar">0<small>unit</small></div>
+          </div>
+          <div class="stat-card c5">
+            <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div></div>
+            <div class="stat-label">Alat Rusak</div>
+            <div class="stat-value" id="statRusak">0<small>unit</small></div>
+          </div>
+          <div class="stat-card c6">
+            <div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
+            <div class="stat-label">Tugas Pending</div>
+            <div class="stat-value" id="statPending">0<small>tugas</small></div>
+          </div>
         </div>
         
-        <div class="alert alert-info" style="margin-bottom:14px;">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Contoh: pencucian GWT, servis AC, cek pompa air, koordinasi dengan bagian kebersihan.</div>
-        </div>
-
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchPemeliharaan" placeholder="Cari kegiatan, PIC..." oninput="renderPemeliharaan()">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Tugas & Pengingat Hari Ini</div>
           </div>
-          <select id="filterStatusPemeliharaan" class="filter-select" onchange="renderPemeliharaan()">
-            <option value="">Semua Status</option>
-            <option value="Terjadwal">Terjadwal</option>
-            <option value="Selesai">Selesai</option>
-            <option value="Terlambat">Terlambat</option>
-          </select>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Kegiatan</th><th>Frekuensi</th><th>Jadwal Berikutnya</th><th>PIC</th><th>Status</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyPemeliharaan"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION PEMELIHARAAN END ================= -->
-
-    <!-- ================= SECTION LAPORAN STOK START ================= -->
-    <div class="page" id="page-stok">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Laporan Stok</div>
-          <button class="btn btn-success" onclick="exportStokExcel()">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export ke Excel (Rapi)
-          </button>
+          <div id="todayTasks"></div>
         </div>
         
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchStok" placeholder="Cari SKU, nama barang..." oninput="renderStok()">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Alat Perlu Perhatian</div>
           </div>
+          <div id="alatPerhatian"></div>
         </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>SKU</th><th>Nama</th><th>Kategori</th><th>Stok Awal</th><th>Masuk</th><th>Keluar</th><th>Stok Akhir</th><th>Status</th></tr></thead>
-            <tbody id="tbodyStok"></tbody>
-          </table>
+        
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Stok Menipis</div>
+          </div>
+          <div id="lowStockList"></div>
         </div>
       </div>
-    </div>
-    <!-- ================= SECTION LAPORAN STOK END ================= -->
+      <!-- ================= SECTION DASHBOARD END ================= -->
 
-    <!-- ================= SECTION CLOSING BULANAN START ================= -->
-    <div class="page" id="page-closing">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 11 17 15 13"/></svg>
-            Closing Stok Bulanan
+      <!-- ================= SECTION MASTER BARANG START ================= -->
+      <div class="page" id="page-barang">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>Master Barang & Alat</div>
+            <button class="btn btn-primary" onclick="openBarangModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Barang
+            </button>
           </div>
-          <div class="panel-actions">
-            <button class="btn btn-success" onclick="exportClosingExcel()">
+          <div class="alert alert-info" style="margin-bottom:14px;">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Kode/SKU <b>tidak wajib</b> diisi. Kosongkan jika belum dapat kode dari finance — akan otomatis dibuatkan, bisa diedit nanti.</div>
+          </div>
+          
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchBarang" placeholder="Cari nama, SKU, kategori..." oninput="renderBarang()">
+            </div>
+            <select id="filterKategori" class="filter-select" onchange="renderBarang()">
+              <option value="">Semua Kategori</option>
+              <option value="Alat">Alat</option>
+              <option value="Scaffolding">Scaffolding</option>
+              <option value="Aset">Aset Perusahaan</option>
+              <option value="Material">Material</option>
+              <option value="Sparepart">Sparepart</option>
+              <option value="Kemasan">Kemasan</option>
+              <option value="ATK">ATK</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+            <select id="filterKondisi" class="filter-select" onchange="renderBarang()">
+              <option value="">Semua Kondisi</option>
+              <option value="Baik">Baik</option>
+              <option value="Perlu Perbaikan">Perlu Perbaikan</option>
+              <option value="Dalam Perbaikan">Dalam Perbaikan</option>
+              <option value="Rusak">Rusak</option>
+            </select>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>SKU</th><th>Nama</th><th>Kategori</th><th>Kondisi</th><th>Stok</th><th>Riwayat Perbaikan</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyBarang"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION MASTER BARANG END ================= -->
+
+      <!-- ================= SECTION BARANG MASUK START ================= -->
+      <div class="page" id="page-masuk">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Barang Masuk</div>
+            <button class="btn btn-success" onclick="openTrxModal('masuk')">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Catat Masuk
+            </button>
+          </div>
+          
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchMasuk" placeholder="Cari nama barang, supplier, dokumen..." oninput="renderTrx('masuk')">
+            </div>
+            <input type="date" id="filterTglMasuk" class="filter-select" style="max-width:160px;" onchange="renderTrx('masuk')">
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('searchMasuk').value='';document.getElementById('filterTglMasuk').value='';renderTrx('masuk')">Reset</button>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Barang</th><th>Jumlah</th><th>Supplier</th><th>Dokumen</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyMasuk"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION BARANG MASUK END ================= -->
+
+      <!-- ================= SECTION BARANG KELUAR START ================= -->
+      <div class="page" id="page-keluar">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Barang Keluar</div>
+            <button class="btn btn-warning" onclick="openTrxModal('keluar')">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Catat Keluar
+            </button>
+          </div>
+          
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchKeluar" placeholder="Cari nama barang, tujuan, dokumen..." oninput="renderTrx('keluar')">
+            </div>
+            <input type="date" id="filterTglKeluar" class="filter-select" style="max-width:160px;" onchange="renderTrx('keluar')">
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('searchKeluar').value='';document.getElementById('filterTglKeluar').value='';renderTrx('keluar')">Reset</button>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Barang</th><th>Jumlah</th><th>Tujuan</th><th>Dokumen</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyKeluar"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION BARANG KELUAR END ================= -->
+
+      <!-- ================= SECTION SCAFFOLDING START ================= -->
+      <div class="page" id="page-scaffolding">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><line x1="3" y1="3" x2="21" y2="3"/><line x1="3" y1="21" x2="21" y2="21"/><line x1="6" y1="3" x2="6" y2="21"/><line x1="18" y1="3" x2="18" y2="21"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="15" x2="18" y2="15"/></svg>Data Scaffolding</div>
+            <button class="btn btn-primary" onclick="openScaffoldingModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Scaffolding
+            </button>
+          </div>
+          <div class="alert alert-info" style="margin-bottom:14px;">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Catat detail scaffolding: jenis, ukuran, jumlah, kondisi, dan lokasi penyimpanan.</div>
+          </div>
+
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchScaffolding" placeholder="Cari jenis, lokasi..." oninput="renderScaffolding()">
+            </div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Jenis</th><th>Ukuran</th><th>Jumlah Total</th><th>Baik</th><th>Rusak</th><th>Lokasi</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyScaffolding"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION SCAFFOLDING END ================= -->
+
+      <!-- ================= SECTION INSPEKSI ALAT START ================= -->
+      <div class="page" id="page-inspeksi">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Inspeksi Alat (Kerjasama Mekanik)</div>
+            <button class="btn btn-primary" onclick="openInspeksiModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Catat Inspeksi
+            </button>
+          </div>
+
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchInspeksi" placeholder="Cari nama alat, mekanik..." oninput="renderInspeksi()">
+            </div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Alat</th><th>Mekanik</th><th>Hasil</th><th>Catatan</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyInspeksi"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION INSPEKSI ALAT END ================= -->
+
+      <!-- ================= SECTION SPAREPART START ================= -->
+      <div class="page" id="page-sparepart">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Permintaan Sparepart (dari Mekanik)</div>
+            <button class="btn btn-primary" onclick="openSparepartModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Permintaan
+            </button>
+          </div>
+          
+          <div class="alert alert-warning" style="margin-bottom:14px;">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>Ringkasan sparepart yang diminta mekanik untuk perbaikan alat. Bisa diteruskan ke finance/purchasing.</div>
+          </div>
+
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchSparepart" placeholder="Cari sparepart, alat, mekanik..." oninput="renderSparepart()">
+            </div>
+          </div>
+
+          <div class="tabs" id="sparepartTabs">
+            <button class="tab-btn active" onclick="filterSparepart('all', this)">Semua</button>
+            <button class="tab-btn" onclick="filterSparepart('pending', this)">Pending</button>
+            <button class="tab-btn" onclick="filterSparepart('disetujui', this)">Disetujui</button>
+            <button class="tab-btn" onclick="filterSparepart('dibeli', this)">Sudah Dibeli</button>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Nama Sparepart</th><th>Untuk Alat</th><th>Qty</th><th>Diminta Oleh</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodySparepart"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION SPAREPART END ================= -->
+
+      <!-- ================= SECTION PENGIRIMAN START ================= -->
+      <div class="page" id="page-pengiriman">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Pengiriman ke Proyek</div>
+            <button class="btn btn-primary" onclick="openPengirimanModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Catat Pengiriman
+            </button>
+          </div>
+
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchPengiriman" placeholder="Cari proyek, barang, kendaraan..." oninput="renderPengiriman()">
+            </div>
+            <select id="filterStatusPengiriman" class="filter-select" onchange="renderPengiriman()">
+              <option value="">Semua Status</option>
+              <option value="Menunggu">Menunggu</option>
+              <option value="Dikirim">Sedang Dikirim</option>
+              <option value="Terkirim">Terkirim</option>
+            </select>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Tujuan Proyek</th><th>Barang</th><th>Jumlah</th><th>Kendaraan</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyPengiriman"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION PENGIRIMAN END ================= -->
+
+      <!-- ================= SECTION SURAT JALAN START ================= -->
+      <div class="page" id="page-suratjalan">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Surat Jalan</div>
+            <button class="btn btn-primary" onclick="openSuratJalanModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Buat Surat Jalan
+            </button>
+          </div>
+          
+          <div class="alert alert-info" style="margin-bottom:14px;">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Nomor SJ otomatis (format: <b>SJ/001/TML/XI/2026</b>). Stok barang <b>otomatis berkurang</b> saat SJ disimpan. Hapus SJ = stok otomatis kembali.</div>
+          </div>
+
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchSuratJalan" placeholder="Cari no SJ, tujuan, driver..." oninput="renderSuratJalan()">
+            </div>
+            <select id="filterStatusSJ" class="filter-select" onchange="renderSuratJalan()">
+              <option value="">Semua Status</option>
+              <option value="Draft">Draft</option>
+              <option value="Dikirim">Dikirim</option>
+              <option value="Diterima">Diterima</option>
+            </select>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>No. SJ</th><th>Tanggal</th><th>Tujuan</th><th>Kendaraan</th><th>Driver</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodySuratJalan"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION SURAT JALAN END ================= -->
+
+      <!-- ================= SECTION KEBERSIHAN START ================= -->
+      <div class="page" id="page-kebersihan">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Checklist Kebersihan Gudang</div>
+          </div>
+          <div class="alert alert-info" style="margin-bottom:14px;">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Checklist harian — klik item untuk tandai selesai. Reset otomatis tiap hari.</div>
+          </div>
+          <div style="margin-bottom:14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div style="font-size:13px; color:var(--text-2);">Tanggal: <b id="kebersihanDate" style="color:var(--text)"></b></div>
+            <button class="btn btn-ghost btn-sm" onclick="resetKebersihan()">Reset Checklist</button>
+          </div>
+          <div id="checklistKebersihan"></div>
+          <div style="margin-top:14px; padding:14px; background:var(--bg-3); border-radius:9px; display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:13px; color:var(--text-2);">Progress:</div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:200px; height:8px; background:var(--bg-4); border-radius:4px; overflow:hidden;">
+                <div id="kebersihanProgressBar" style="height:100%; background:linear-gradient(90deg,var(--green),#059669); width:0%; transition:width .3s;"></div>
+              </div>
+              <b id="kebersihanProgress" style="color:var(--green); font-size:14px;">0%</b>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION KEBERSIHAN END ================= -->
+
+      <!-- ================= SECTION PEMELIHARAAN START ================= -->
+      <div class="page" id="page-pemeliharaan">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg>Jadwal Pemeliharaan Gedung</div>
+            <button class="btn btn-primary" onclick="openPemeliharaanModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Jadwal
+            </button>
+          </div>
+          
+          <div class="alert alert-info" style="margin-bottom:14px;">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Contoh: pencucian GWT, servis AC, cek pompa air, koordinasi dengan bagian kebersihan.</div>
+          </div>
+
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchPemeliharaan" placeholder="Cari kegiatan, PIC..." oninput="renderPemeliharaan()">
+            </div>
+            <select id="filterStatusPemeliharaan" class="filter-select" onchange="renderPemeliharaan()">
+              <option value="">Semua Status</option>
+              <option value="Terjadwal">Terjadwal</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Terlambat">Terlambat</option>
+            </select>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Kegiatan</th><th>Frekuensi</th><th>Jadwal Berikutnya</th><th>PIC</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyPemeliharaan"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION PEMELIHARAAN END ================= -->
+
+      <!-- ================= SECTION LAPORAN STOK START ================= -->
+      <div class="page" id="page-stok">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Laporan Stok</div>
+            <button class="btn btn-success" onclick="exportStokExcel()">
               <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Export ke Excel (Rapi)
             </button>
-            <button class="btn btn-primary" onclick="openClosingModal()">
-              <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-              Kunci Closing
+          </div>
+          
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchStok" placeholder="Cari SKU, nama barang..." oninput="renderStok()">
+            </div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>SKU</th><th>Nama</th><th>Kategori</th><th>Stok Awal</th><th>Masuk</th><th>Keluar</th><th>Stok Akhir</th><th>Status</th></tr></thead>
+              <tbody id="tbodyStok"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION LAPORAN STOK END ================= -->
+
+      <!-- ================= SECTION CLOSING BULANAN START ================= -->
+      <div class="page" id="page-closing">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 11 17 15 13"/></svg>
+              Closing Stok Bulanan
+            </div>
+            <div class="panel-actions">
+              <button class="btn btn-success" onclick="exportClosingExcel()">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export ke Excel (Rapi)
+              </button>
+              <button class="btn btn-primary" onclick="openClosingModal()">
+                <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                Kunci Closing
+              </button>
+            </div>
+          </div>
+          
+          <div class="alert alert-info" style="margin-bottom:16px;">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Pilih periode untuk melihat <b>saldo awal, total masuk, total keluar, dan saldo akhir</b> bulan tersebut. Klik "Kunci Closing" untuk menyimpan snapshot permanen sebagai arsip akhir bulan.</div>
+          </div>
+          
+          <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:end;">
+            <div class="form-group" style="margin:0; min-width:150px;">
+              <label>Bulan</label>
+              <select id="closingBulan" onchange="renderClosing()">
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0; min-width:120px;">
+              <label>Tahun</label>
+              <select id="closingTahun" onchange="renderClosing()"></select>
+            </div>
+            <div class="search-wrap" style="max-width:300px;">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="closingSearch" placeholder="Cari barang..." oninput="renderClosing()">
+            </div>
+          </div>
+          
+          <div id="closingSummary" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:16px;"></div>
+          
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Nama Barang</th>
+                  <th>Kategori</th>
+                  <th>Saldo Awal</th>
+                  <th>Masuk</th>
+                  <th>Keluar</th>
+                  <th>Saldo Akhir</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyClosing"></tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+              Arsip Closing Terkunci
+            </div>
+          </div>
+          <div id="closingArsip"></div>
+        </div>
+      </div>
+      <!-- ================= SECTION CLOSING BULANAN END ================= -->
+
+      <!-- ================= SECTION RIWAYAT START ================= -->
+      <div class="page" id="page-riwayat">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Riwayat Transaksi</div>
+            <button class="btn btn-success" onclick="exportRiwayatExcel()">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export ke Excel (Rapi)
             </button>
           </div>
-        </div>
-        
-        <div class="alert alert-info" style="margin-bottom:16px;">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div>Pilih periode untuk melihat <b>saldo awal, total masuk, total keluar, dan saldo akhir</b> bulan tersebut. Klik "Kunci Closing" untuk menyimpan snapshot permanen sebagai arsip akhir bulan.</div>
-        </div>
-        
-        <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:end;">
-          <div class="form-group" style="margin:0; min-width:150px;">
-            <label>Bulan</label>
-            <select id="closingBulan" onchange="renderClosing()">
-              <option value="1">Januari</option>
-              <option value="2">Februari</option>
-              <option value="3">Maret</option>
-              <option value="4">April</option>
-              <option value="5">Mei</option>
-              <option value="6">Juni</option>
-              <option value="7">Juli</option>
-              <option value="8">Agustus</option>
-              <option value="9">September</option>
-              <option value="10">Oktober</option>
-              <option value="11">November</option>
-              <option value="12">Desember</option>
+          
+          <div class="search-filter-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchRiwayat" placeholder="Cari SKU, nama barang, keterangan..." oninput="renderRiwayat()">
+            </div>
+            <select id="filterTipeRiwayat" class="filter-select" onchange="renderRiwayat()">
+              <option value="">Semua Tipe</option>
+              <option value="masuk">Masuk</option>
+              <option value="keluar">Keluar</option>
             </select>
           </div>
-          <div class="form-group" style="margin:0; min-width:120px;">
-            <label>Tahun</label>
-            <select id="closingTahun" onchange="renderClosing()"></select>
-          </div>
-          <div class="search-wrap" style="max-width:300px;">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="closingSearch" placeholder="Cari barang..." oninput="renderClosing()">
-          </div>
-        </div>
-        
-        <div id="closingSummary" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:16px;"></div>
-        
-        <div class="tbl-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>SKU</th>
-                <th>Nama Barang</th>
-                <th>Kategori</th>
-                <th>Saldo Awal</th>
-                <th>Masuk</th>
-                <th>Keluar</th>
-                <th>Saldo Akhir</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="tbodyClosing"></tbody>
-          </table>
-        </div>
-      </div>
-      
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            Arsip Closing Terkunci
-          </div>
-        </div>
-        <div id="closingArsip"></div>
-      </div>
-    </div>
-    <!-- ================= SECTION CLOSING BULANAN END ================= -->
 
-    <!-- ================= SECTION RIWAYAT START ================= -->
-    <div class="page" id="page-riwayat">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Riwayat Transaksi</div>
-          <button class="btn btn-success" onclick="exportRiwayatExcel()">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export ke Excel (Rapi)
-          </button>
-        </div>
-        
-        <div class="search-filter-bar">
-          <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="searchRiwayat" placeholder="Cari SKU, nama barang, keterangan..." oninput="renderRiwayat()">
-          </div>
-          <select id="filterTipeRiwayat" class="filter-select" onchange="renderRiwayat()">
-            <option value="">Semua Tipe</option>
-            <option value="masuk">Masuk</option>
-            <option value="keluar">Keluar</option>
-          </select>
-        </div>
-
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tanggal</th><th>Tipe</th><th>Barang</th><th>Jumlah</th><th>Keterangan</th><th>Aksi</th></tr></thead>
-            <tbody id="tbodyRiwayat"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <!-- ================= SECTION RIWAYAT END ================= -->
-
-    <!-- ================= SECTION BACKUP START ================= -->
-    <div class="page" id="page-backup">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>Backup & Restore Data</div>
-        </div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
-          <button class="btn btn-primary" onclick="backupData()">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download Backup (.json)
-          </button>
-          <label class="btn btn-success" style="cursor:pointer;">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Restore
-            <input type="file" accept=".json" style="display:none" onchange="restoreData(event)">
-          </label>
-          <button class="btn btn-danger" onclick="resetAll()">
-            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
-            Reset Semua
-          </button>
-        </div>
-        <div class="panel" style="background:var(--bg-3); margin-bottom:0;">
-          <div class="panel-title" style="margin-bottom:14px;">Statistik Data (Cloud)</div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:16px;">
-            <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Barang</div><div style="font-size:20px; font-weight:700;" id="backupBarang">0</div></div>
-            <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Transaksi</div><div style="font-size:20px; font-weight:700;" id="backupTrx">0</div></div>
-            <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Surat Jalan</div><div style="font-size:20px; font-weight:700;" id="backupSJ">0</div></div>
-            <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Ukuran</div><div style="font-size:20px; font-weight:700;" id="backupSize">0 KB</div></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Tipe</th><th>Barang</th><th>Jumlah</th><th>Keterangan</th><th>Aksi</th></tr></thead>
+              <tbody id="tbodyRiwayat"></tbody>
+            </table>
           </div>
         </div>
       </div>
+      <!-- ================= SECTION RIWAYAT END ================= -->
+
+      <!-- ================= SECTION BACKUP START ================= -->
+      <div class="page" id="page-backup">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>Backup & Restore Data</div>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
+            <button class="btn btn-primary" onclick="backupData()">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Backup (.json)
+            </button>
+            <label class="btn btn-success" style="cursor:pointer;">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Restore
+              <input type="file" accept=".json" style="display:none" onchange="restoreData(event)">
+            </label>
+            <button class="btn btn-danger" onclick="resetAll()">
+              <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+              Reset Semua
+            </button>
+          </div>
+          <div class="panel" style="background:var(--bg-3); margin-bottom:0;">
+            <div class="panel-title" style="margin-bottom:14px;">Statistik Data (Cloud)</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:16px;">
+              <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Barang</div><div style="font-size:20px; font-weight:700;" id="backupBarang">0</div></div>
+              <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Transaksi</div><div style="font-size:20px; font-weight:700;" id="backupTrx">0</div></div>
+              <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Surat Jalan</div><div style="font-size:20px; font-weight:700;" id="backupSJ">0</div></div>
+              <div><div style="font-size:11px; color:var(--text-3); margin-bottom:4px;">Ukuran</div><div style="font-size:20px; font-weight:700;" id="backupSize">0 KB</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ================= SECTION BACKUP END ================= -->
     </div>
-    <!-- ================= SECTION BACKUP END ================= -->
+    <!-- ================= SECTION MAIN CONTENT END ================= -->
   </div>
-  <!-- ================= SECTION MAIN CONTENT END ================= -->
 </div>
+<!-- ================= SECTION APP CONTENT END ================= -->
 
 <!-- ================= SECTION MODAL BARANG START ================= -->
 <div class="modal-bg" id="modalBarang">
@@ -1618,6 +1929,93 @@
 <!-- ================= FIREBASE SDK END ================= -->
 
 <script>
+// ================= SECTION LOGIN LOGIC START =================
+document.addEventListener('DOMContentLoaded', () => {
+  // Generate particles for login background
+  const particleContainer = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 8 + 2;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 5 + 's';
+    p.style.animationDuration = (Math.random() * 4 + 6) + 's';
+    particleContainer.appendChild(p);
+  }
+
+  // Check if already logged in
+  if (sessionStorage.getItem('wms_logged_in') === 'true') {
+    showApp();
+  }
+});
+
+function handleLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  const errorEl = document.getElementById('loginError');
+  const btn = document.getElementById('btnLogin');
+  
+  errorEl.classList.remove('show');
+  btn.classList.add('loading');
+  
+  // Simulasi delay loading agar terlihat natural
+  setTimeout(() => {
+    if (user === 'ADMIN26' && pass === 'ADMIN26') {
+      sessionStorage.setItem('wms_logged_in', 'true');
+      
+      // Animasi Slide Up untuk App Content
+      document.getElementById('loginScreen').classList.add('hidden');
+      showApp();
+      
+      // Toast Sukses
+      setTimeout(() => {
+        toast('Selamat datang, Admin!', 'success');
+      }, 500);
+    } else {
+      errorEl.classList.add('show');
+      btn.classList.remove('loading');
+      document.getElementById('loginPass').value = ''; // Reset password
+      document.getElementById('loginPass').focus();
+    }
+  }, 1000);
+}
+
+function showApp() {
+  const appContent = document.getElementById('appContent');
+  document.getElementById('loginScreen').style.display = 'none';
+  appContent.classList.add('show');
+  
+  // Render UI setelah login
+  renderAll();
+  initClosingYears();
+}
+
+function handleLogout() {
+  if (!confirm('Apakah Anda yakin ingin keluar dari sistem?')) return;
+  
+  sessionStorage.removeItem('wms_logged_in');
+  
+  // Reset form login
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('btnLogin').classList.remove('loading');
+  
+  // Sembunyikan App, Tampilkan Login
+  document.getElementById('appContent').classList.remove('show');
+  const loginScreen = document.getElementById('loginScreen');
+  loginScreen.style.display = 'flex';
+  
+  // Trigger reflow untuk animasi
+  void loginScreen.offsetWidth;
+  loginScreen.classList.remove('hidden');
+}
+// ================= SECTION LOGIN LOGIC END =================
+
 // ================= SECTION DATA & CLOUD SYNC START =================
 let data = {
   barang: [],
@@ -3233,7 +3631,6 @@ function renderStok() {
 function exportStokExcel() {
   if (data.barang.length === 0) { toast('Tidak ada data', 'error'); return; }
   
-  // Buat HTML Table dengan inline CSS agar rapi di Excel
   let html = `
     <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
     <head>
@@ -3893,16 +4290,6 @@ function renderDashboard() {
       }</tbody></table></div>`;
 }
 // ================= SECTION FITUR DASHBOARD END =================
-
-// ================= SECTION INIT START =================
-document.getElementById('today').textContent = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'short', year:'numeric' });
-
-// Aplikasi akan merender UI kosong dulu, lalu data akan otomatis terisi
-// setelah Firebase selesai memuat data dari Cloud.
-renderAll();
-initClosingYears();
-
-// ================= SECTION INIT END =================
 </script>
 </body>
 </html>
