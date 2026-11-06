@@ -27,7 +27,6 @@
     overflow-x: hidden;
   }
 
-  /* ================= LOGIN SCREEN START ================= */
   #loginScreen {
     position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
     background: #0a0a0f; z-index: 9999; overflow: hidden; transition: opacity 0.6s ease, visibility 0.6s ease;
@@ -92,12 +91,10 @@
   .login-error.show { display: flex; }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
   .login-footer { text-align: center; margin-top: 28px; font-size: 11px; color: var(--text-3); }
-  /* ================= LOGIN SCREEN END ================= */
 
   #appContent { display: none; }
   #appContent.show { display: block; }
 
-  /* ================= SIDEBAR START ================= */
   .app { display:flex; min-height:100vh; }
   .sidebar {
     width: 260px; background: linear-gradient(180deg, #12121a 0%, #0f0f16 100%);
@@ -156,9 +153,7 @@
   }
   .logout-btn:hover { background: rgba(239,68,68,.2); }
   .logout-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
-  /* ================= SIDEBAR END ================= */
 
-  /* ================= MAIN HEADER START ================= */
   .main { flex: 1; margin-left: 260px; padding: 26px 30px; min-width: 0; }
   
   .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
@@ -173,6 +168,34 @@
   }
   .online-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; animation: pulse 1.5s infinite; box-shadow: 0 0 8px #34d399; }
 
+  /* ===== KB MONITOR ===== */
+  .kb-monitor {
+    display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 9px;
+    font-size: 12px; color: var(--text-2); font-weight: 600;
+    transition: all .3s ease;
+  }
+  .kb-monitor svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+  .kb-bar-wrap {
+    width: 70px; height: 6px; background: var(--bg-4); border-radius: 3px; overflow: hidden;
+    flex-shrink: 0;
+  }
+  .kb-bar {
+    height: 100%; width: 0%; background: var(--green);
+    transition: width .5s ease, background .3s ease;
+    border-radius: 3px;
+  }
+  .kb-monitor.warning { color: var(--orange); border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.06); }
+  .kb-monitor.warning .kb-bar { background: var(--orange); }
+  .kb-monitor.danger { color: var(--red); border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.06); }
+  .kb-monitor.danger .kb-bar { background: var(--red); }
+  .kb-monitor.danger { animation: kbDangerPulse 2s infinite; }
+  @keyframes kbDangerPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.3); } 50% { box-shadow: 0 0 0 6px rgba(239,68,68,0); } }
+  .kb-detail {
+    display: flex; flex-direction: column; gap: 1px; line-height: 1.1;
+  }
+  .kb-detail small { font-size: 9.5px; color: var(--text-3); font-weight: 500; }
+
   .date-chip {
     display: flex; align-items: center; gap: 8px; padding: 9px 14px; background: var(--bg-2);
     border: 1px solid var(--border); border-radius: 9px; font-size: 12.5px; color: var(--text-2); font-weight: 500;
@@ -185,9 +208,7 @@
   }
   .save-indicator.saving { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.25); color: #fbbf24; }
   .save-indicator svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
-  /* ================= MAIN HEADER END ================= */
 
-  /* ================= DASHBOARD CARDS START ================= */
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 22px; }
   .stat-card {
     background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 20px;
@@ -229,9 +250,7 @@
   .stat-label { font-size: 11px; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; position: relative; }
   .stat-value { font-size: 26px; font-weight: 800; letter-spacing: -.8px; color: var(--text); line-height: 1; position: relative; }
   .stat-value small { font-size: 12px; font-weight: 500; color: var(--text-3); margin-left: 4px; }
-  /* ================= DASHBOARD CARDS END ================= */
 
-  /* ================= PANELS & TABLES START ================= */
   .panel { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 18px; overflow: hidden; }
   .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
   .panel-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -.2px; }
@@ -253,9 +272,7 @@
   tr:last-child td { border-bottom: none; }
   
   .action-btns { display: flex; gap: 5px; }
-  /* ================= PANELS & TABLES END ================= */
 
-  /* ================= BUTTONS & FORMS START ================= */
   .btn {
     padding: 9px 14px; border: none; border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600;
     font-family: inherit; transition: all .2s ease; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
@@ -296,17 +313,13 @@
   .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
   .form-group label { display: block; font-size: 11.5px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; letter-spacing: .2px; }
   .form-group label .req { color: var(--red); margin-left: 2px; }
-  /* ================= BUTTONS & FORMS END ================= */
 
-  /* ================= SEARCH & FILTER BAR START ================= */
   .search-filter-bar { display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
   .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 400px; }
   .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; stroke: var(--text-3); fill: none; stroke-width: 2; pointer-events: none; }
   .search-wrap input { padding-left: 36px; }
   .filter-select { max-width: 180px; }
-  /* ================= SEARCH & FILTER BAR END ================= */
 
-  /* ================= BADGES START ================= */
   .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: .2px; white-space: nowrap; }
   .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
   .badge-green { background: rgba(16,185,129,.15); color: #34d399; }
@@ -317,9 +330,7 @@
   .badge-pink { background: rgba(236,72,153,.15); color: #f472b6; }
   .badge-yellow { background: rgba(234,179,8,.15); color: #facc15; }
   .badge-gray { background: rgba(148,163,184,.15); color: #94a3b8; }
-  /* ================= BADGES END ================= */
 
-  /* ================= MODAL START ================= */
   .modal-bg {
     position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); display: none;
     align-items: center; justify-content: center; z-index: 1000; padding: 20px; animation: fadeIn .2s ease;
@@ -336,16 +347,12 @@
   .modal::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
   .modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 18px; color: var(--text); letter-spacing: -.3px; }
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
-  /* ================= MODAL END ================= */
 
-  /* ================= PAGES & EMPTY STATE START ================= */
   .page { display: none; animation: fadeIn .3s ease; }
   .page.active { display: block; }
   .empty { text-align: center; padding: 40px 20px; color: var(--text-3); font-size: 13px; }
   .empty svg { width: 42px; height: 42px; stroke: var(--text-3); fill: none; stroke-width: 1.5; margin-bottom: 12px; opacity: .5; }
-  /* ================= PAGES & EMPTY STATE END ================= */
 
-  /* ================= TOAST START ================= */
   .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
   .toast {
     padding: 13px 17px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--border-hi);
@@ -362,9 +369,7 @@
   .toast.error svg { stroke: var(--red); }
   .toast.info { border-color: rgba(99,102,241,.4); }
   .toast.info svg { stroke: var(--accent); }
-  /* ================= TOAST END ================= */
 
-  /* ================= CHECKLIST START ================= */
   .checklist-item {
     display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-3);
     border: 1px solid var(--border); border-radius: 9px; margin-bottom: 8px; cursor: pointer; transition: all .2s;
@@ -380,15 +385,15 @@
   .checklist-box svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 3; opacity: 0; transition: opacity .2s; }
   .checklist-item.done .checklist-box svg { opacity: 1; }
   .checklist-text { flex: 1; font-size: 13px; }
-  /* ================= CHECKLIST END ================= */
 
-  /* ================= ALERT & TABS START ================= */
   .alert { display: flex; gap: 12px; padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; line-height: 1.5; }
   .alert svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .alert-warning { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.25); color: #fbbf24; }
   .alert-warning svg { stroke: #fbbf24; }
   .alert-info { background: rgba(6,182,212,.08); border: 1px solid rgba(6,182,212,.25); color: #22d3ee; }
   .alert-info svg { stroke: #22d3ee; }
+  .alert-danger { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25); color: #f87171; }
+  .alert-danger svg { stroke: #f87171; }
   
   .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .tab-btn {
@@ -397,9 +402,7 @@
   }
   .tab-btn:hover { border-color: var(--border-hi); color: var(--text); }
   .tab-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border-color: transparent; box-shadow: 0 3px 12px var(--accent-glow); }
-  /* ================= ALERT & TABS END ================= */
 
-  /* ================= SURAT JALAN PREVIEW START ================= */
   .sj-preview-wrap { background: #f5f5f7; border-radius: 12px; padding: 16px; overflow-x: auto; }
   .sj-preview {
     background: #ffffff; color: #1a1a1a; padding: 0; border-radius: 4px;
@@ -479,9 +482,7 @@
   
   .sj-footer { margin-top: 22px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 9px; color: #999; text-align: center; font-style: italic; letter-spacing: .3px; }
   .sj-footer strong { color: #b8860b; }
-  /* ================= SURAT JALAN PREVIEW END ================= */
 
-  /* ================= PRINT SETTINGS START ================= */
   @media print {
     @page { margin: 0; size: A4; }
     body { background: #fff !important; }
@@ -496,9 +497,7 @@
     .modal-bg { background: #fff !important; }
     .modal { background: #fff !important; border: none !important; padding: 0 !important; box-shadow: none !important; }
   }
-  /* ================= PRINT SETTINGS END ================= */
 
-  /* ================= RESPONSIVE START ================= */
   @media (max-width: 700px) {
     .sj-body { padding: 20px 18px 18px; }
     .sj-kop-text h1 { font-size: 18px; }
@@ -521,6 +520,7 @@
     .header-left h2 { font-size: 20px; }
     .logout-btn span { display: none; }
     .logout-btn { justify-content: center; padding: 10px; }
+    .kb-monitor .kb-detail small { display: none; }
   }
   @media(max-width: 500px) {
     .stat-value { font-size: 22px; }
@@ -528,13 +528,12 @@
     .tbl-wrap { margin: 0 -14px -14px; padding: 0 14px 14px; }
     .toast-container { top: 10px; right: 10px; left: 10px; }
     .toast { min-width: unset; }
+    .kb-bar-wrap { width: 40px; }
   }
-  /* ================= RESPONSIVE END ================= */
 </style>
 </head>
 <body>
 
-<!-- ================= SECTION LOGIN SCREEN START ================= -->
 <div id="loginScreen">
   <div class="login-bg" id="particles"></div>
   
@@ -576,13 +575,10 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION LOGIN SCREEN END ================= -->
 
-<!-- ================= SECTION APP CONTENT START ================= -->
 <div id="appContent">
   <div class="app">
 
-    <!-- ================= SECTION SIDEBAR START ================= -->
     <div class="sidebar">
       <div class="brand">
         <div class="brand-logo">
@@ -688,12 +684,9 @@
         <span>Sistem Aktif (Cloud)</span>
       </div>
     </div>
-    <!-- ================= SECTION SIDEBAR END ================= -->
 
-    <!-- ================= SECTION MAIN CONTENT START ================= -->
     <div class="main">
       
-      <!-- ================= SECTION HEADER START ================= -->
       <div class="header">
         <div class="header-left">
           <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
@@ -712,6 +705,14 @@
             <div class="online-dot"></div>
             <span id="onlineCount">1</span> Online
           </div>
+          <div class="kb-monitor" id="kbMonitor" title="Penggunaan penyimpanan Cloud (limit 1 MB)">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <div class="kb-bar-wrap"><div class="kb-bar" id="kbBar"></div></div>
+            <div class="kb-detail">
+              <span id="kbText">0 KB</span>
+              <small id="kbSub">dari 1 MB (0%)</small>
+            </div>
+          </div>
           <div class="save-indicator" id="saveIndicator">
             <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             <span id="saveText">Tersimpan</span>
@@ -722,9 +723,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION HEADER END ================= -->
 
-      <!-- ================= SECTION DASHBOARD START ================= -->
       <div class="page active" id="page-dashboard">
         <div class="cards">
           <div class="stat-card c1">
@@ -785,9 +784,7 @@
           <div id="lowStockList"></div>
         </div>
       </div>
-      <!-- ================= SECTION DASHBOARD END ================= -->
 
-      <!-- ================= SECTION MASTER BARANG START ================= -->
       <div class="page" id="page-barang">
         <div class="panel">
           <div class="panel-header">
@@ -835,9 +832,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION MASTER BARANG END ================= -->
 
-      <!-- ================= SECTION BARANG MASUK START ================= -->
       <div class="page" id="page-masuk">
         <div class="panel">
           <div class="panel-header">
@@ -865,9 +860,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION BARANG MASUK END ================= -->
 
-      <!-- ================= SECTION BARANG KELUAR START ================= -->
       <div class="page" id="page-keluar">
         <div class="panel">
           <div class="panel-header">
@@ -895,9 +888,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION BARANG KELUAR END ================= -->
 
-      <!-- ================= SECTION PEMBELIAN START ================= -->
       <div class="page" id="page-pembelian">
         <div class="panel">
           <div class="panel-header">
@@ -927,9 +918,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION PEMBELIAN END ================= -->
 
-      <!-- ================= SECTION PENGATURAN KAS START ================= -->
       <div class="page" id="page-pengaturankas">
         <div class="panel">
           <div class="panel-header">
@@ -953,9 +942,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION PENGATURAN KAS END ================= -->
 
-      <!-- ================= SECTION LAPORAN KAS START ================= -->
       <div class="page" id="page-laporankas">
         <div class="panel">
           <div class="panel-header">
@@ -990,9 +977,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION LAPORAN KAS END ================= -->
 
-      <!-- ================= SECTION SCAFFOLDING START ================= -->
       <div class="page" id="page-scaffolding">
         <div class="panel">
           <div class="panel-header">
@@ -1022,9 +1007,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION SCAFFOLDING END ================= -->
 
-      <!-- ================= SECTION INSPEKSI ALAT START ================= -->
       <div class="page" id="page-inspeksi">
         <div class="panel">
           <div class="panel-header">
@@ -1050,9 +1033,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION INSPEKSI ALAT END ================= -->
 
-      <!-- ================= SECTION SPAREPART START ================= -->
       <div class="page" id="page-sparepart">
         <div class="panel">
           <div class="panel-header">
@@ -1089,9 +1070,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION SPAREPART END ================= -->
 
-      <!-- ================= SECTION PENGIRIMAN START ================= -->
       <div class="page" id="page-pengiriman">
         <div class="panel">
           <div class="panel-header">
@@ -1123,9 +1102,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION PENGIRIMAN END ================= -->
 
-      <!-- ================= SECTION SURAT JALAN START ================= -->
       <div class="page" id="page-suratjalan">
         <div class="panel">
           <div class="panel-header">
@@ -1162,9 +1139,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION SURAT JALAN END ================= -->
 
-      <!-- ================= SECTION KEBERSIHAN START ================= -->
       <div class="page" id="page-kebersihan">
         <div class="panel">
           <div class="panel-header">
@@ -1190,9 +1165,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION KEBERSIHAN END ================= -->
 
-      <!-- ================= SECTION PEMELIHARAAN START ================= -->
       <div class="page" id="page-pemeliharaan">
         <div class="panel">
           <div class="panel-header">
@@ -1229,9 +1202,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION PEMELIHARAAN END ================= -->
 
-      <!-- ================= SECTION LAPORAN STOK START ================= -->
       <div class="page" id="page-stok">
         <div class="panel">
           <div class="panel-header">
@@ -1257,9 +1228,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION LAPORAN STOK END ================= -->
 
-      <!-- ================= SECTION CLOSING BULANAN START ================= -->
       <div class="page" id="page-closing">
         <div class="panel">
           <div class="panel-header">
@@ -1276,12 +1245,16 @@
                 <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
                 Kunci Closing
               </button>
+              <button class="btn btn-warning" onclick="openRolloverModal()" title="Rollover stok & kosongkan transaksi untuk kurangi ukuran data">
+                <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Tutup Buku & Rollover
+              </button>
             </div>
           </div>
           
           <div class="alert alert-info" style="margin-bottom:16px;">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <div>Pilih periode untuk melihat <b>saldo awal, total masuk, total keluar, dan saldo akhir</b> bulan tersebut. Klik "Kunci Closing" untuk menyimpan snapshot permanen sebagai arsip akhir bulan.</div>
+            <div>Pilih periode untuk melihat <b>saldo awal, total masuk, total keluar, dan saldo akhir</b> bulan tersebut. Klik "Kunci Closing" untuk snapshot arsip, atau <b>"Tutup Buku & Rollover"</b> untuk mereset data transaksi agar ukuran KB turun.</div>
           </div>
           
           <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:end;">
@@ -1343,9 +1316,7 @@
           <div id="closingArsip"></div>
         </div>
       </div>
-      <!-- ================= SECTION CLOSING BULANAN END ================= -->
 
-      <!-- ================= SECTION RIWAYAT START ================= -->
       <div class="page" id="page-riwayat">
         <div class="panel">
           <div class="panel-header">
@@ -1376,9 +1347,7 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION RIWAYAT END ================= -->
 
-      <!-- ================= SECTION BACKUP START ================= -->
       <div class="page" id="page-backup">
         <div class="panel">
           <div class="panel-header">
@@ -1410,14 +1379,10 @@
           </div>
         </div>
       </div>
-      <!-- ================= SECTION BACKUP END ================= -->
     </div>
-    <!-- ================= SECTION MAIN CONTENT END ================= -->
   </div>
 </div>
-<!-- ================= SECTION APP CONTENT END ================= -->
 
-<!-- ================= SECTION MODAL BARANG START ================= -->
 <div class="modal-bg" id="modalBarang">
   <div class="modal">
     <h3 id="modalBarangTitle">Tambah Barang</h3>
@@ -1470,9 +1435,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL BARANG END ================= -->
 
-<!-- ================= SECTION MODAL TRANSAKSI START ================= -->
 <div class="modal-bg" id="modalTrx">
   <div class="modal">
     <h3 id="modalTrxTitle">Catat Transaksi</h3>
@@ -1496,9 +1459,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL TRANSAKSI END ================= -->
 
-<!-- ================= SECTION MODAL PEMBELIAN START ================= -->
 <div class="modal-bg" id="modalPembelian">
   <div class="modal">
     <h3 id="modalPembelianTitle">Tambah Pembelian</h3>
@@ -1522,9 +1483,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL PEMBELIAN END ================= -->
 
-<!-- ================= SECTION MODAL SCAFFOLDING START ================= -->
 <div class="modal-bg" id="modalScaffolding">
   <div class="modal">
     <h3 id="modalScaffoldingTitle">Tambah Scaffolding</h3>
@@ -1561,9 +1520,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL SCAFFOLDING END ================= -->
 
-<!-- ================= SECTION MODAL INSPEKSI START ================= -->
 <div class="modal-bg" id="modalInspeksi">
   <div class="modal">
     <h3 id="modalInspeksiTitle">Catat Inspeksi Alat</h3>
@@ -1590,9 +1547,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL INSPEKSI END ================= -->
 
-<!-- ================= SECTION MODAL SPAREPART START ================= -->
 <div class="modal-bg" id="modalSparepart">
   <div class="modal">
     <h3 id="modalSparepartTitle">Tambah Permintaan Sparepart</h3>
@@ -1622,9 +1577,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL SPAREPART END ================= -->
 
-<!-- ================= SECTION MODAL PENGIRIMAN START ================= -->
 <div class="modal-bg" id="modalPengiriman">
   <div class="modal">
     <h3 id="modalPengirimanTitle">Catat Pengiriman ke Proyek</h3>
@@ -1661,9 +1614,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL PENGIRIMAN END ================= -->
 
-<!-- ================= SECTION MODAL SURAT JALAN START ================= -->
 <div class="modal-bg" id="modalSuratJalan">
   <div class="modal" style="max-width:700px;">
     <h3 id="modalSuratJalanTitle">Buat Surat Jalan</h3>
@@ -1742,9 +1693,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL SURAT JALAN END ================= -->
 
-<!-- ================= SECTION MODAL PREVIEW START ================= -->
 <div class="modal-bg" id="modalSJPreview">
   <div class="modal" style="max-width:800px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -1761,9 +1710,7 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL PREVIEW END ================= -->
 
-<!-- ================= SECTION MODAL PEMELIHARAAN START ================= -->
 <div class="modal-bg" id="modalPemeliharaan">
   <div class="modal">
     <h3 id="modalPemeliharaanTitle">Tambah Jadwal Pemeliharaan</h3>
@@ -1799,11 +1746,53 @@
     </div>
   </div>
 </div>
-<!-- ================= SECTION MODAL PEMELIHARAAN END ================= -->
+
+<div class="modal-bg" id="modalRollover">
+  <div class="modal" style="max-width:750px;">
+    <h3 style="display:flex; align-items:center; gap:10px;">
+      <svg viewBox="0 0 24 24" style="width:22px; height:22px; stroke:var(--orange); fill:none; stroke-width:2;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Tutup Buku & Rollover
+    </h3>
+
+    <div class="alert alert-warning" style="margin-bottom:16px;">
+      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div>
+        <b>WAJIB:</b> Sudah download backup JSON sebelum lanjut?<br>
+        <span style="font-size:12px;">Tanpa backup, data yang dihapus TIDAK BISA dikembalikan.</span>
+      </div>
+    </div>
+
+    <div id="rolloverPreview" style="margin-bottom:16px;"></div>
+
+    <div style="background:var(--bg-3); border-radius:10px; padding:14px; margin-bottom:16px;">
+      <div style="font-size:11px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px;">Yang Akan Dilakukan</div>
+      <div id="rolloverActions" style="display:flex; flex-direction:column; gap:8px; font-size:13px;"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Nama Anda (untuk log aktivitas):</label>
+      <input id="rolloverOleh" placeholder="cth: Admin / Pak Budi" autocomplete="off">
+    </div>
+
+    <div class="form-group">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="rolloverConfirm" style="width:auto; margin:0;">
+        <span style="font-size:12.5px; color:var(--text-2);">Saya sudah backup JSON & Excel, dan yakin melakukan rollover ini</span>
+      </label>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalRollover')">Batal</button>
+      <button class="btn btn-warning" id="btnRolloverExecute" onclick="executeRollover()" disabled style="opacity:.5;">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Eksekusi Rollover
+      </button>
+    </div>
+  </div>
+</div>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ================= FIREBASE SDK START ================= -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -1826,11 +1815,9 @@
   window.getDoc = getDoc;
   window.setDoc = setDoc;
   
-  // FIX: Set flag global SEBELUM dispatch event
   window.firebaseReadyFlag = true;
   window.dispatchEvent(new Event('firebaseReady'));
 </script>
-<!-- ================= FIREBASE SDK END ================= -->
 
 <script>
 // ================= SECTION LOGIN LOGIC START =================
@@ -1849,7 +1836,6 @@ document.addEventListener('DOMContentLoaded', () => {
     particleContainer.appendChild(p);
   }
 
-  // Set tanggal header
   const todayEl = document.getElementById('today');
   if (todayEl) {
     todayEl.textContent = new Date().toLocaleDateString('id-ID', { 
@@ -1857,7 +1843,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // FIX: Init firebase listener (bisa handle race condition)
   initFirebaseListener();
 
   if (sessionStorage.getItem('wms_logged_in') === 'true') {
@@ -1890,16 +1875,13 @@ function handleLogin(e) {
   }, 1000);
 }
 
-// FIX: showApp() TIDAK renderAll() — tunggu cloud load
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appContent').classList.add('show');
   initClosingYears();
-  // Jangan renderAll() di sini. loadDataFromCloud() akan render setelah selesai.
   if (isCloudReady) {
     loadDataFromCloud();
   }
-  // Kalau belum ready, loadDataFromCloud akan dipanggil oleh firebase listener
 }
 
 function handleLogout() {
@@ -1925,14 +1907,12 @@ let data = {
 };
 
 let isCloudReady = false;
-let isLoadingData = false; // FIX: guard untuk prevent save saat loading
-let cloudLoadedOnce = false; // FIX: prevent double-load
+let isLoadingData = false;
+let cloudLoadedOnce = false;
 const CLOUD_DOC_ID = 'wms_data_pt_trimatra';
 
-// FIX: init listener dengan flag + fallback
 function initFirebaseListener() {
   if (window.firebaseReadyFlag) {
-    // Firebase sudah siap sebelum listener terpasang
     isCloudReady = true;
     if (sessionStorage.getItem('wms_logged_in') === 'true') {
       loadDataFromCloud();
@@ -1948,11 +1928,10 @@ function initFirebaseListener() {
     }
   }, { once: true });
   
-  // Fallback: cek berkala kalau event tidak fire
   const checkInterval = setInterval(() => {
     if (window.firebaseReadyFlag) {
       clearInterval(checkInterval);
-      if (isCloudReady) return; // sudah di-handle listener
+      if (isCloudReady) return;
       isCloudReady = true;
       if (sessionStorage.getItem('wms_logged_in') === 'true') {
         loadDataFromCloud();
@@ -1960,14 +1939,12 @@ function initFirebaseListener() {
     }
   }, 500);
   
-  // Timeout safety
   setTimeout(() => clearInterval(checkInterval), 10000);
 }
 
-// FIX: loadDataFromCloud — SELALU render di akhir, guard dengan isLoadingData
 async function loadDataFromCloud() {
   if (!isCloudReady) return;
-  if (cloudLoadedOnce) return; // prevent double load
+  if (cloudLoadedOnce) return;
   cloudLoadedOnce = true;
   isLoadingData = true;
   
@@ -1999,23 +1976,20 @@ async function loadDataFromCloud() {
         suratJalan: data.suratJalan.length
       });
     } else {
-      // Dokumen belum ada di cloud — coba restore dari localStorage
       const localData = localStorage.getItem('wms_gudang_v3');
       if (localData) {
         try {
           const parsed = JSON.parse(localData);
           Object.assign(data, parsed);
-          isLoadingData = false; // sementara matikan guard untuk save
+          isLoadingData = false;
           await saveDataToCloud();
-          isLoadingData = true; // nyalakan lagi
+          isLoadingData = true;
         } catch(e) { console.warn('localStorage parse error:', e); }
       }
     }
   } catch (e) {
     console.error("❌ Error loading from cloud:", e);
     toast('Gagal memuat dari Cloud. Periksa internet & Rules Firebase.', 'error');
-    
-    // Fallback ke localStorage
     const localData = localStorage.getItem('wms_gudang_v3');
     if (localData) {
       try {
@@ -2027,12 +2001,11 @@ async function loadDataFromCloud() {
   }
   
   isLoadingData = false;
-  renderAll(); // FIX: SELALU render setelah load selesai
+  renderAll();
   hideSaveIndicator();
 }
 
 async function saveDataToCloud() {
-  // FIX: Guard — jangan save saat data masih loading dari cloud
   if (isLoadingData) {
     console.warn('⏸️ Skip save: data masih loading dari cloud');
     return;
@@ -2056,6 +2029,7 @@ async function saveDataToCloud() {
     }, { merge: true });
     
     localStorage.setItem('wms_gudang_v3', JSON.stringify(data));
+    updateKBIndicator();
   } catch (e) {
     console.error("❌ Error saving to cloud:", e);
     toast('Gagal menyimpan ke Cloud! Cek aturan Firestore.', 'error');
@@ -2078,30 +2052,54 @@ function hideSaveIndicator() {
     txt.textContent = 'Tersimpan (Cloud)';
   }
 }
+
+// ================= SECTION KB INDICATOR START =================
+function updateKBIndicator() {
+  const monitor = document.getElementById('kbMonitor');
+  const bar = document.getElementById('kbBar');
+  const text = document.getElementById('kbText');
+  const sub = document.getElementById('kbSub');
+  
+  if (!monitor || !bar || !text || !sub) return;
+  
+  const sizeBytes = new Blob([JSON.stringify(data)]).size;
+  const sizeKB = sizeBytes / 1024;
+  const limitKB = 1024;
+  const percent = Math.min((sizeKB / limitKB) * 100, 100);
+  
+  bar.style.width = percent + '%';
+  text.textContent = sizeKB.toFixed(1) + ' KB';
+  sub.textContent = 'dari 1 MB (' + percent.toFixed(0) + '%)';
+  
+  monitor.classList.remove('warning', 'danger');
+  if (percent >= 80) {
+    monitor.classList.add('danger');
+    monitor.title = `⚠️ HAMPIR PENUH! ${sizeKB.toFixed(1)} KB / 1024 KB. Segera lakukan Rollover.`;
+  } else if (percent >= 50) {
+    monitor.classList.add('warning');
+    monitor.title = `⚠️ Waspada: ${sizeKB.toFixed(1)} KB / 1024 KB. Siapkan backup.`;
+  } else {
+    monitor.title = `✅ Aman: ${sizeKB.toFixed(1)} KB / 1024 KB`;
+  }
+}
+// ================= SECTION KB INDICATOR END =================
 // ================= SECTION DATA & CLOUD SYNC END =================
 
-// ================= SECTION MONITOR ONLINE START =================
 setInterval(() => {
   const now = Date.now();
   let devices = JSON.parse(localStorage.getItem('wms_online_devices') || '{}');
-  
   Object.keys(devices).forEach(id => {
     if (now - devices[id] > 10000) delete devices[id];
   });
-  
   const myId = sessionStorage.getItem('wms_device_id') || Math.random().toString(36).substring(2, 9);
   sessionStorage.setItem('wms_device_id', myId);
   devices[myId] = now;
-  
   localStorage.setItem('wms_online_devices', JSON.stringify(devices));
-  
   const count = Object.keys(devices).length;
   const el = document.getElementById('onlineCount');
   if (el) el.textContent = count;
 }, 5000);
-// ================= SECTION MONITOR ONLINE END =================
 
-// ================= SECTION TOAST & NAVIGASI START =================
 function toast(msg, type = 'success') {
   const icons = {
     success: '<polyline points="20 6 9 17 4 12"/>',
@@ -2237,10 +2235,9 @@ function renderAll() {
   renderClosing();
   renderRiwayat();
   renderBackup();
+  updateKBIndicator();
 }
-// ================= SECTION TOAST & NAVIGASI END =================
 
-// ================= SECTION FITUR MASTER BARANG START =================
 function openBarangModal(idx) {
   document.getElementById('modalBarangTitle').textContent = idx !== undefined ? 'Edit Barang' : 'Tambah Barang';
   document.getElementById('editIndex').value = idx !== undefined ? idx : '';
@@ -2378,9 +2375,7 @@ function renderBarang() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR MASTER BARANG END =================
 
-// ================= SECTION FITUR TRANSAKSI START =================
 function openTrxModal(tipe, trxId) {
   if (data.barang.length === 0) { toast('Tambah barang dulu!', 'error'); return; }
   const isEdit = trxId !== undefined;
@@ -2549,9 +2544,7 @@ function renderTrx(tipe) {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR TRANSAKSI END =================
 
-// ================= SECTION FITUR PEMBELIAN & KAS START =================
 function openPembelianModal(id) {
   const isEdit = id !== undefined;
   const pb = isEdit ? data.pembelian.find(p => p.id === id) : null;
@@ -2790,9 +2783,7 @@ function exportKasExcel() {
   link.click();
   toast('Laporan Kas Excel diunduh!', 'success');
 }
-// ================= SECTION FITUR PEMBELIAN & KAS END =================
 
-// ================= SECTION FITUR SCAFFOLDING START =================
 function openScaffoldingModal(idx) {
   document.getElementById('modalScaffoldingTitle').textContent = idx !== undefined ? 'Edit Scaffolding' : 'Tambah Scaffolding';
   document.getElementById('scafEditIndex').value = idx !== undefined ? idx : '';
@@ -2881,9 +2872,7 @@ function renderScaffolding() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR SCAFFOLDING END =================
 
-// ================= SECTION FITUR INSPEKSI START =================
 function openInspeksiModal(id) {
   if (data.barang.length === 0) { toast('Tambah barang/alat dulu!', 'error'); return; }
   const isEdit = id !== undefined;
@@ -3007,9 +2996,7 @@ function renderInspeksi() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR INSPEKSI END =================
 
-// ================= SECTION FITUR SPAREPART START =================
 let sparepartFilter = 'all';
 
 function filterSparepart(status, btn) {
@@ -3117,9 +3104,7 @@ function renderSparepart() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR SPAREPART END =================
 
-// ================= SECTION FITUR PENGIRIMAN START =================
 function openPengirimanModal(id) {
   const isEdit = id !== undefined;
   const p = isEdit ? data.pengiriman.find(x => x.id === id) : null;
@@ -3219,9 +3204,7 @@ function renderPengiriman() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR PENGIRIMAN END =================
 
-// ================= SECTION FITUR SURAT JALAN START =================
 const ROMAN_MONTHS = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
 
 function generateNoSJ() {
@@ -3667,9 +3650,7 @@ function renderSuratJalan() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR SURAT JALAN END =================
 
-// ================= SECTION FITUR KEBERSIHAN START =================
 const DEFAULT_CHECKLIST = [
   'Sapu & pel lantai gudang', 'Bersihkan debu rak & barang', 'Rapikan tumpukan barang', 'Buang sampah ke TPS',
   'Cek saluran air tidak tersumbat', 'Bersihkan area bongkar muat', 'Cek kebersihan toilet & mushola', 'Siram tanaman sekitar gudang'
@@ -3681,7 +3662,6 @@ function renderKebersihan() {
   
   if (!data.kebersihan[todayKey]) {
     data.kebersihan[todayKey] = DEFAULT_CHECKLIST.map(text => ({ text, done: false }));
-    // FIX: Jangan save kalau data masih loading dari cloud
     if (!isLoadingData) saveDataToCloud();
   }
   
@@ -3719,9 +3699,7 @@ function resetKebersihan() {
   toast('Checklist direset', 'success');
   renderKebersihan();
 }
-// ================= SECTION FITUR KEBERSIHAN END =================
 
-// ================= SECTION FITUR PEMELIHARAAN START =================
 function openPemeliharaanModal(id) {
   const isEdit = id !== undefined;
   const p = isEdit ? data.pemeliharaan.find(x => x.id === id) : null;
@@ -3826,9 +3804,7 @@ function renderPemeliharaan() {
     </tr>`;
   }).join('');
 }
-// ================= SECTION FITUR PEMELIHARAAN END =================
 
-// ================= SECTION FITUR LAPORAN STOK START =================
 function renderStok() {
   const q = (document.getElementById('searchStok')?.value || '').toLowerCase();
   let list = data.barang;
@@ -3930,9 +3906,7 @@ function exportStokExcel() {
   link.click();
   toast('Laporan Excel (Rapi) berhasil diunduh!', 'success');
 }
-// ================= SECTION FITUR LAPORAN STOK END =================
 
-// ================= SECTION FITUR CLOSING START =================
 function initClosingYears() {
   const sel = document.getElementById('closingTahun');
   if (!sel) return;
@@ -4287,9 +4261,220 @@ function exportClosingExcel() {
   link.click();
   toast(`Laporan Excel (Rapi) diunduh!`, 'success');
 }
-// ================= SECTION FITUR CLOSING END =================
 
-// ================= SECTION FITUR RIWAYAT START =================
+// ================= SECTION FITUR ROLLOVER START =================
+function openRolloverModal() {
+  const preview = document.getElementById('rolloverPreview');
+  const actionsEl = document.getElementById('rolloverActions');
+  
+  let totalBarang = data.barang.length;
+  let totalTransaksi = data.transaksi.length;
+  let totalSJ = data.suratJalan.length;
+  let totalPengiriman = data.pengiriman.length;
+  let totalKas = data.kas.length;
+  let totalPembelian = data.pembelian.length;
+  let totalInspeksi = data.inspeksi.length;
+  let totalSparepart = data.sparepart.length;
+  
+  let barangBerubah = 0;
+  let contohPerubahan = [];
+  data.barang.forEach(b => {
+    const masuk = data.transaksi.filter(t => t.sku === b.sku && t.tipe === 'masuk').reduce((s,t) => s + t.jumlah, 0);
+    const keluar = data.transaksi.filter(t => t.sku === b.sku && t.tipe === 'keluar').reduce((s,t) => s + t.jumlah, 0);
+    const stokAkhir = b.stokAwal + masuk - keluar;
+    if (stokAkhir !== b.stokAwal) {
+      barangBerubah++;
+      if (contohPerubahan.length < 3) {
+        contohPerubahan.push(`${b.nama}: ${b.stokAwal} → ${stokAkhir}`);
+      }
+    }
+  });
+  
+  const kasMasuk = data.kas.filter(k => k.tipe === 'masuk').reduce((s,k) => s + k.nominal, 0);
+  const kasKeluar = data.kas.filter(k => k.tipe === 'keluar').reduce((s,k) => s + k.nominal, 0);
+  const saldoAkhir = (data.saldoAwalKas || 0) + kasMasuk - kasKeluar;
+  
+  const sizeNow = new Blob([JSON.stringify(data)]).size;
+  const sizeAfter = new Blob([JSON.stringify({
+    ...data,
+    transaksi: [], suratJalan: [], pengiriman: [], kas: [],
+    pembelian: [], inspeksi: [], sparepart: []
+  })]).size;
+  
+  preview.innerHTML = `
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+      <div class="stat-card c3" style="padding:12px;">
+        <div class="stat-label">Ukuran Sekarang</div>
+        <div class="stat-value" style="font-size:18px;">${(sizeNow/1024).toFixed(1)} KB</div>
+      </div>
+      <div class="stat-card c2" style="padding:12px;">
+        <div class="stat-label">Setelah Rollover</div>
+        <div class="stat-value" style="font-size:18px; color:#34d399;">${(sizeAfter/1024).toFixed(1)} KB</div>
+      </div>
+    </div>
+    
+    <div style="background:var(--bg-3); border-radius:10px; padding:14px; font-size:12.5px; line-height:1.7;">
+      <div style="font-weight:700; color:var(--text); margin-bottom:6px;">📊 Rollover Stok Barang</div>
+      <div style="color:var(--text-2);">
+        <b>${totalBarang}</b> barang akan di-rollover (stokAwal = stok akhir) ✅<br>
+        <b>${barangBerubah}</b> barang stoknya berubah<br>
+        ${contohPerubahan.length > 0 ? `<i style="color:var(--text-3); font-size:11.5px;">Contoh: ${contohPerubahan.join(' • ')}</i>` : ''}
+      </div>
+      
+      <div style="font-weight:700; color:var(--text); margin-top:10px; margin-bottom:6px;">💰 Rollover Saldo Kas</div>
+      <div style="color:var(--text-2);">
+        Saldo Awal: <b>Rp ${(data.saldoAwalKas || 0).toLocaleString('id-ID')}</b><br>
+        Kas Masuk: <b style="color:#34d399;">+Rp ${kasMasuk.toLocaleString('id-ID')}</b><br>
+        Kas Keluar: <b style="color:#f87171;">-Rp ${kasKeluar.toLocaleString('id-ID')}</b><br>
+        <b style="color:var(--accent);">→ Saldo Awal Baru: Rp ${saldoAkhir.toLocaleString('id-ID')}</b>
+      </div>
+    </div>
+  `;
+  
+  actionsEl.innerHTML = `
+    <div style="display:flex; align-items:center; gap:8px; color:#34d399;">
+      <span style="font-size:16px;">✅</span>
+      <span><b>DIPERTAHANKAN:</b> ${totalBarang} barang, ${data.scaffolding.length} scaffolding, ${data.pemeliharaan.length} pemeliharaan, ${data.closing.length} arsip closing</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; color:#f87171;">
+      <span style="font-size:16px;">🗑️</span>
+      <span><b>DIKOSONGKAN:</b> ${totalTransaksi} transaksi, ${totalSJ} surat jalan, ${totalPengiriman} pengiriman, ${totalKas} kas, ${totalPembelian} pembelian, ${totalInspeksi} inspeksi, ${totalSparepart} sparepart</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; color:#fbbf24; font-size:12px;">
+      <span style="font-size:16px;">⚠️</span>
+      <span>Data yang dikosongkan masih tersimpan di file backup JSON & Excel yang sudah kamu download</span>
+    </div>
+  `;
+  
+  document.getElementById('rolloverOleh').value = '';
+  document.getElementById('rolloverConfirm').checked = false;
+  const btnExec = document.getElementById('btnRolloverExecute');
+  btnExec.disabled = true;
+  btnExec.style.opacity = '0.5';
+  
+  const checkbox = document.getElementById('rolloverConfirm');
+  const newCheckbox = checkbox.cloneNode(true);
+  checkbox.parentNode.replaceChild(newCheckbox, checkbox);
+  newCheckbox.addEventListener('change', (e) => {
+    btnExec.disabled = !e.target.checked;
+    btnExec.style.opacity = e.target.checked ? '1' : '0.5';
+  });
+  
+  openModal('modalRollover');
+}
+
+function executeRollover() {
+  const oleh = document.getElementById('rolloverOleh').value.trim();
+  if (!oleh) {
+    toast('Nama Anda wajib diisi!', 'error');
+    document.getElementById('rolloverOleh').focus();
+    return;
+  }
+  
+  const confirmed = document.getElementById('rolloverConfirm').checked;
+  if (!confirmed) {
+    toast('Centang konfirmasi dulu!', 'error');
+    return;
+  }
+  
+  if (!confirm('⚠️ KONFIRMASI FINAL ⚠️\n\nData yang akan dikosongkan:\n• Transaksi\n• Surat Jalan\n• Pengiriman\n• Kas\n• Pembelian\n• Inspeksi\n• Sparepart\n\nMaster barang, scaffolding, pemeliharaan TETAP AMAN.\n\nLanjutkan?')) return;
+  
+  const payload = { version: 3, exportedAt: new Date().toISOString(), ...data };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `WMS_Backup_SEBELUM_ROLLOVER_${today()}.json`;
+  link.click();
+  
+  toast('Backup otomatis terdownload. Memproses rollover...', 'info');
+  
+  let barangBerubah = 0;
+  data.barang.forEach(b => {
+    const masuk = data.transaksi.filter(t => t.sku === b.sku && t.tipe === 'masuk').reduce((s,t) => s + t.jumlah, 0);
+    const keluar = data.transaksi.filter(t => t.sku === b.sku && t.tipe === 'keluar').reduce((s,t) => s + t.jumlah, 0);
+    const stokAkhir = b.stokAwal + masuk - keluar;
+    if (stokAkhir !== b.stokAwal) barangBerubah++;
+    b.stokAwal = stokAkhir;
+  });
+  
+  const kasMasuk = data.kas.filter(k => k.tipe === 'masuk').reduce((s,k) => s + k.nominal, 0);
+  const kasKeluar = data.kas.filter(k => k.tipe === 'keluar').reduce((s,k) => s + k.nominal, 0);
+  const saldoLama = data.saldoAwalKas || 0;
+  data.saldoAwalKas = saldoLama + kasMasuk - kasKeluar;
+  
+  const now = new Date();
+  const bulan = now.getMonth() + 1;
+  const tahun = now.getFullYear();
+  const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][bulan - 1];
+  const periode = `${namaBulan} ${tahun}`;
+  const periodeKey = `${tahun}-${String(bulan).padStart(2,'0')}`;
+  
+  const itemsSnapshot = data.barang.map(b => ({
+    sku: b.sku, nama: b.nama, kategori: b.kategori, satuan: b.satuan,
+    saldoAwal: b.stokAwal, masuk: 0, keluar: 0, saldoAkhir: b.stokAwal
+  }));
+  
+  data.closing = (data.closing || []).filter(c => c.periodeKey !== periodeKey);
+  data.closing.push({
+    timestamp: Date.now(),
+    periodeKey, periode, bulan, tahun,
+    oleh: oleh,
+    totalAkhir: itemsSnapshot.reduce((s,i) => s + i.saldoAkhir, 0),
+    items: itemsSnapshot,
+    keterangan: 'Auto-snapshot dari Rollover'
+  });
+  
+  const dihapus = {
+    transaksi: data.transaksi.length,
+    suratJalan: data.suratJalan.length,
+    pengiriman: data.pengiriman.length,
+    kas: data.kas.length,
+    pembelian: data.pembelian.length,
+    inspeksi: data.inspeksi.length,
+    sparepart: data.sparepart.length
+  };
+  
+  data.transaksi = [];
+  data.suratJalan = [];
+  data.pengiriman = [];
+  data.kas = [];
+  data.pembelian = [];
+  data.inspeksi = [];
+  data.sparepart = [];
+  
+  const tigaBulanLalu = new Date();
+  tigaBulanLalu.setMonth(tigaBulanLalu.getMonth() - 3);
+  const kebersihanBaru = {};
+  Object.keys(data.kebersihan || {}).forEach(tgl => {
+    if (new Date(tgl) >= tigaBulanLalu) {
+      kebersihanBaru[tgl] = data.kebersihan[tgl];
+    }
+  });
+  data.kebersihan = kebersihanBaru;
+  
+  if (data.closing && data.closing.length > 12) {
+    data.closing = data.closing
+      .sort((a,b) => b.timestamp - a.timestamp)
+      .slice(0, 12);
+  }
+  
+  saveDataToCloud();
+  
+  console.log(`✅ ROLLOVER SELESAI oleh ${oleh} pada ${new Date().toLocaleString('id-ID')}`);
+  console.log('Stok di-rollover:', barangBerubah, 'barang');
+  console.log('Saldo kas:', saldoLama, '→', data.saldoAwalKas);
+  console.log('Data dikosongkan:', dihapus);
+  
+  closeModal('modalRollover');
+  renderAll();
+  
+  const totalDihapus = Object.values(dihapus).reduce((s,v) => s + v, 0);
+  toast(`✅ Rollover berhasil! ${barangBerubah} barang di-rollover, ${totalDihapus} data lama diarsip.`, 'success');
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// ================= SECTION FITUR ROLLOVER END =================
+
 function renderRiwayat() {
   const q = (document.getElementById('searchRiwayat')?.value || '').toLowerCase();
   const fTipe = document.getElementById('filterTipeRiwayat')?.value || '';
@@ -4395,9 +4580,7 @@ function exportRiwayatExcel() {
   link.click();
   toast('Riwayat Excel (Rapi) berhasil diunduh!', 'success');
 }
-// ================= SECTION FITUR RIWAYAT END =================
 
-// ================= SECTION FITUR BACKUP START =================
 function renderBackup() {
   document.getElementById('backupBarang').textContent = data.barang.length;
   document.getElementById('backupTrx').textContent = data.transaksi.length;
@@ -4450,17 +4633,15 @@ function restoreData(event) {
 }
 
 function resetAll() {
-  if (!confirm('Hapus SEMUA data di Cloud? Tidak bisa dibatalkan.')) return;
-  if (!confirm('Yakin 100%?')) return;
+  if (!confirm('Hapus SEMUA data di Cloud? Tidak bisa dibatalkan.\n\nPENTING: Gunakan "Tutup Buku & Rollover" di menu Closing untuk siklus bulanan yang aman.')) return;
+  if (!confirm('Yakin 100%? Master barang, scaffolding, pemeliharaan SEMUA akan hilang.')) return;
   
   data = { barang: [], transaksi: [], scaffolding: [], inspeksi: [], sparepart: [], pengiriman: [], suratJalan: [], pemeliharaan: [], kebersihan: {}, closing: [], pembelian: [], kas: [], saldoAwalKas: 0 };
   saveDataToCloud();
   toast('Semua data di Cloud dihapus', 'success');
   renderAll();
 }
-// ================= SECTION FITUR BACKUP END =================
 
-// ================= SECTION FITUR DASHBOARD START =================
 function renderDashboard() {
   const totalStok = data.barang.reduce((s,b) => s + hitungStok(b.sku), 0);
   document.getElementById('statItem').innerHTML = `${data.barang.length}<small>SKU</small>`;
@@ -4520,7 +4701,6 @@ function renderDashboard() {
         }).join('')
       }</tbody></table></div>`;
 }
-// ================= SECTION FITUR DASHBOARD END =================
 </script>
 </body>
 </html>
