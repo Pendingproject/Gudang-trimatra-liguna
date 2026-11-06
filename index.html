@@ -1805,11 +1805,9 @@
 
 <!-- ================= FIREBASE SDK START ================= -->
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyD95dJ_eRhP7siwDdbsMr50-adu_htgPrM",
     authDomain: "liguna-26.firebaseapp.com",
@@ -1820,17 +1818,16 @@
     measurementId: "G-CK568D4S52"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   
-  // Expose to global window so regular scripts can use it
   window.db = db;
   window.doc = doc;
   window.getDoc = getDoc;
   window.setDoc = setDoc;
   
-  // Dispatch event when ready
+  // FIX: Set flag global SEBELUM dispatch event
+  window.firebaseReadyFlag = true;
   window.dispatchEvent(new Event('firebaseReady'));
 </script>
 <!-- ================= FIREBASE SDK END ================= -->
@@ -1851,6 +1848,17 @@ document.addEventListener('DOMContentLoaded', () => {
     p.style.animationDuration = (Math.random() * 4 + 6) + 's';
     particleContainer.appendChild(p);
   }
+
+  // Set tanggal header
+  const todayEl = document.getElementById('today');
+  if (todayEl) {
+    todayEl.textContent = new Date().toLocaleDateString('id-ID', { 
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+    });
+  }
+
+  // FIX: Init firebase listener (bisa handle race condition)
+  initFirebaseListener();
 
   if (sessionStorage.getItem('wms_logged_in') === 'true') {
     showApp();
@@ -1882,11 +1890,16 @@ function handleLogin(e) {
   }, 1000);
 }
 
+// FIX: showApp() TIDAK renderAll() — tunggu cloud load
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appContent').classList.add('show');
-  renderAll();
   initClosingYears();
+  // Jangan renderAll() di sini. loadDataFromCloud() akan render setelah selesai.
+  if (isCloudReady) {
+    loadDataFromCloud();
+  }
+  // Kalau belum ready, loadDataFromCloud akan dipanggil oleh firebase listener
 }
 
 function handleLogout() {
@@ -1912,15 +1925,52 @@ let data = {
 };
 
 let isCloudReady = false;
+let isLoadingData = false; // FIX: guard untuk prevent save saat loading
+let cloudLoadedOnce = false; // FIX: prevent double-load
 const CLOUD_DOC_ID = 'wms_data_pt_trimatra';
 
-window.addEventListener('firebaseReady', () => {
-  isCloudReady = true;
-  loadDataFromCloud();
-});
+// FIX: init listener dengan flag + fallback
+function initFirebaseListener() {
+  if (window.firebaseReadyFlag) {
+    // Firebase sudah siap sebelum listener terpasang
+    isCloudReady = true;
+    if (sessionStorage.getItem('wms_logged_in') === 'true') {
+      loadDataFromCloud();
+    }
+    return;
+  }
+  
+  window.addEventListener('firebaseReady', () => {
+    if (cloudLoadedOnce) return;
+    isCloudReady = true;
+    if (sessionStorage.getItem('wms_logged_in') === 'true') {
+      loadDataFromCloud();
+    }
+  }, { once: true });
+  
+  // Fallback: cek berkala kalau event tidak fire
+  const checkInterval = setInterval(() => {
+    if (window.firebaseReadyFlag) {
+      clearInterval(checkInterval);
+      if (isCloudReady) return; // sudah di-handle listener
+      isCloudReady = true;
+      if (sessionStorage.getItem('wms_logged_in') === 'true') {
+        loadDataFromCloud();
+      }
+    }
+  }, 500);
+  
+  // Timeout safety
+  setTimeout(() => clearInterval(checkInterval), 10000);
+}
 
+// FIX: loadDataFromCloud — SELALU render di akhir, guard dengan isLoadingData
 async function loadDataFromCloud() {
   if (!isCloudReady) return;
+  if (cloudLoadedOnce) return; // prevent double load
+  cloudLoadedOnce = true;
+  isLoadingData = true;
+  
   showSaveIndicator('Memuat data dari Cloud...', true);
   
   try {
@@ -1943,26 +1993,51 @@ async function loadDataFromCloud() {
       data.kas = cloudData.kas || [];
       data.saldoAwalKas = cloudData.saldoAwalKas || 0;
       
-      renderAll();
+      console.log('✅ Data loaded from cloud:', {
+        barang: data.barang.length,
+        transaksi: data.transaksi.length,
+        suratJalan: data.suratJalan.length
+      });
     } else {
+      // Dokumen belum ada di cloud — coba restore dari localStorage
       const localData = localStorage.getItem('wms_gudang_v3');
       if (localData) {
         try {
           const parsed = JSON.parse(localData);
           Object.assign(data, parsed);
-          await saveDataToCloud(); 
-        } catch(e) {}
+          isLoadingData = false; // sementara matikan guard untuk save
+          await saveDataToCloud();
+          isLoadingData = true; // nyalakan lagi
+        } catch(e) { console.warn('localStorage parse error:', e); }
       }
     }
   } catch (e) {
-    console.error("Error loading from cloud:", e);
+    console.error("❌ Error loading from cloud:", e);
     toast('Gagal memuat dari Cloud. Periksa internet & Rules Firebase.', 'error');
+    
+    // Fallback ke localStorage
+    const localData = localStorage.getItem('wms_gudang_v3');
+    if (localData) {
+      try {
+        const parsed = JSON.parse(localData);
+        Object.assign(data, parsed);
+        toast('Data dimuat dari cache lokal.', 'info');
+      } catch(e2) {}
+    }
   }
   
+  isLoadingData = false;
+  renderAll(); // FIX: SELALU render setelah load selesai
   hideSaveIndicator();
 }
 
 async function saveDataToCloud() {
+  // FIX: Guard — jangan save saat data masih loading dari cloud
+  if (isLoadingData) {
+    console.warn('⏸️ Skip save: data masih loading dari cloud');
+    return;
+  }
+  
   if (!isCloudReady) {
     localStorage.setItem('wms_gudang_v3', JSON.stringify(data));
     return;
@@ -1978,11 +2053,11 @@ async function saveDataToCloud() {
       suratJalan: data.suratJalan, pemeliharaan: data.pemeliharaan, kebersihan: data.kebersihan,
       closing: data.closing, pembelian: data.pembelian, kas: data.kas, saldoAwalKas: data.saldoAwalKas,
       lastUpdated: new Date().toISOString()
-    }, { merge: true }); // USE MERGE TO PREVENT DATA LOSS
+    }, { merge: true });
     
     localStorage.setItem('wms_gudang_v3', JSON.stringify(data));
   } catch (e) {
-    console.error("Error saving to cloud:", e);
+    console.error("❌ Error saving to cloud:", e);
     toast('Gagal menyimpan ke Cloud! Cek aturan Firestore.', 'error');
   }
   
@@ -1992,31 +2067,28 @@ async function saveDataToCloud() {
 function showSaveIndicator(text = 'Menyimpan...', isSaving = true) {
   const ind = document.getElementById('saveIndicator');
   const txt = document.getElementById('saveText');
-  if (isSaving) { ind.classList.add('saving'); txt.textContent = text; }
+  if (isSaving && ind && txt) { ind.classList.add('saving'); txt.textContent = text; }
 }
 
 function hideSaveIndicator() {
   const ind = document.getElementById('saveIndicator');
   const txt = document.getElementById('saveText');
-  ind.classList.remove('saving');
-  txt.textContent = 'Tersimpan (Cloud)';
+  if (ind && txt) {
+    ind.classList.remove('saving');
+    txt.textContent = 'Tersimpan (Cloud)';
+  }
 }
 // ================= SECTION DATA & CLOUD SYNC END =================
 
 // ================= SECTION MONITOR ONLINE START =================
-// Simulasi real-time monitor device (Menggunakan localStorage Broadcast)
-// Note: Untuk produksi real-time murni butuh Firebase Realtime Database.
-// Ini adalah simulasi ringan agar tampilan berfungsi.
 setInterval(() => {
   const now = Date.now();
   let devices = JSON.parse(localStorage.getItem('wms_online_devices') || '{}');
   
-  // Hapus device yang tidak aktif > 10 detik
   Object.keys(devices).forEach(id => {
     if (now - devices[id] > 10000) delete devices[id];
   });
   
-  // Daftarkan device ini
   const myId = sessionStorage.getItem('wms_device_id') || Math.random().toString(36).substring(2, 9);
   sessionStorage.setItem('wms_device_id', myId);
   devices[myId] = now;
@@ -2024,7 +2096,8 @@ setInterval(() => {
   localStorage.setItem('wms_online_devices', JSON.stringify(devices));
   
   const count = Object.keys(devices).length;
-  document.getElementById('onlineCount').textContent = count;
+  const el = document.getElementById('onlineCount');
+  if (el) el.textContent = count;
 }, 5000);
 // ================= SECTION MONITOR ONLINE END =================
 
@@ -2366,11 +2439,9 @@ function saveTrx() {
     const newId = Date.now();
     data.transaksi.push({ id: newId, ...payload });
     
-    // OTOMATISASI BARANG KELUAR -> SJ & PENGIRIMAN
     if (tipe === 'keluar') {
       const b = data.barang.find(x => x.sku === sku);
       if (b) {
-        // 1. Otomatis buat Surat Jalan
         const sjNomor = generateNoSJ();
         const sjId = Date.now() + 1;
         data.suratJalan.push({
@@ -2386,7 +2457,6 @@ function saveTrx() {
           items: [{ sku: b.sku, nama: b.nama, qty: String(jumlah), satuan: b.satuan }]
         });
         
-        // 2. Otomatis catat Pengiriman
         data.pengiriman.push({
           id: Date.now() + 2,
           tanggal: tanggal,
@@ -2523,7 +2593,6 @@ function savePembelian() {
   
   if (id === '') {
     data.pembelian.push({ id: Date.now(), ...item });
-    // Otomatis catat Kas Keluar
     data.kas.push({ id: Date.now()+1, tanggal, tipe: 'keluar', keterangan: `Pembelian ${namaBarang} (${jumlah})`, nominal: totalBiaya });
     toast('Pembelian dicatat & Kas dipotong!', 'success');
   } else {
@@ -2531,7 +2600,6 @@ function savePembelian() {
     if (idx !== -1) {
       const old = data.pembelian[idx];
       data.pembelian[idx] = { ...old, ...item };
-      // Update Kas terkait
       const kasIdx = data.kas.findIndex(k => k.id === old.id + 1);
       if (kasIdx !== -1) {
         data.kas[kasIdx].tanggal = tanggal;
@@ -2619,7 +2687,6 @@ function renderKas() {
   if (fTipe) list = list.filter(k => k.tipe === fTipe);
   if (q) list = list.filter(k => k.keterangan.toLowerCase().includes(q));
 
-  // Hitung Saldo
   let totalMasuk = data.kas.filter(k => k.tipe === 'masuk').reduce((s,k) => s + k.nominal, 0);
   let totalKeluar = data.kas.filter(k => k.tipe === 'keluar').reduce((s,k) => s + k.nominal, 0);
   let saldo = (data.saldoAwalKas || 0) + totalMasuk - totalKeluar;
@@ -3614,7 +3681,8 @@ function renderKebersihan() {
   
   if (!data.kebersihan[todayKey]) {
     data.kebersihan[todayKey] = DEFAULT_CHECKLIST.map(text => ({ text, done: false }));
-    saveDataToCloud();
+    // FIX: Jangan save kalau data masih loading dari cloud
+    if (!isLoadingData) saveDataToCloud();
   }
   
   const items = data.kebersihan[todayKey];
